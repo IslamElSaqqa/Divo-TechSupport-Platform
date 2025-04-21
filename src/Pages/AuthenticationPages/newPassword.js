@@ -12,26 +12,19 @@ const Newpassword = () => {
   
   const handleSubmit = async (e) => { 
     e.preventDefault()
-    if (newPassword !== confPassword) {
-      toast.error('Passwords do not match!');
-      return;
-    }
-      const email = sessionStorage.getItem('email')
-      const otp = sessionStorage.getItem('otp')
-    
-      const success = await resetPassword(email, otp, newPassword)
+    const success = await resetPassword(newPassword, confPassword)
     if (success) {
       sessionStorage.removeItem('email')
       sessionStorage.removeItem('otp')
+      sessionStorage.removeItem('resetToken')
       navigate('/pass-changed')
-    }
+    } 
     else { 
       console.log('failed to reset password')
       // toast.error('Failed to reset password!')
       return;
     }
 }
-
   return (
     <div className="content-container">
         <ToastContainer />

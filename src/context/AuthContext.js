@@ -9,6 +9,8 @@ export const authReducer = (state, action) => {
         case 'LOGOUT':
             return { user: null }
         case 'FORGOT_PASSWORD':
+            return { user: action.payload }
+        case 'VERIFY_OTP':
             return { user: action.payload}
         case 'RESET_PASSWORD':
             return { user: action.payload}

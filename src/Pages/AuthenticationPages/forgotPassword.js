@@ -2,55 +2,33 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useVerifyOtp } from '../../Hooks/useVerifyOtp';
 
 const ForgetPass = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const navigate = useNavigate();
+    const { isVerifying, error, verifyOtp} = useVerifyOtp()
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (otp.includes('')) {
             toast.error('Please enter all 6 digits of the OTP.');
             return;
         }
-        const rawStoredOtp = sessionStorage.getItem('otp');
-        const storedOtp = rawStoredOtp ? rawStoredOtp.trim() : null;
+        const email = sessionStorage.getItem('email')
+        // const rawStoredOtp = sessionStorage.getItem('otp');
+        // const storedOtp = rawStoredOtp ? rawStoredOtp.trim() : null;
         const enteredOtp = otp.join('').trim();
-
-        if (!storedOtp) {
-            toast.error('OTP not stored in Session!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                });        }
         
-        if (enteredOtp === storedOtp) {
-            toast.success('OTP verified successfully!', {
-                    position: 'top-right',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-            });
-                    // Redirect after a short delay
-                setTimeout(() => {
-                        navigate('/newPassword');
-                }, 2000);                
-        } else {
-            toast.error('Invalid OTP code!', {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+        const success = await verifyOtp(email, enteredOtp)
+        if (success) {
+            toast.success("OTP verified successfully!")
+            setTimeout(() => {
+                navigate("/newPassword")
+            }, 2000)
+        }
+        else { 
+            toast.error('Invalid or expired Otp!')
         }
     };
 
@@ -108,6 +86,7 @@ const ForgetPass = () => {
                         Enter the verification code we just<br />
                         sent on your email address
                         </p>
+                    {error && <div className="error">{ error}</div> }
                         <form onSubmit={handleSubmit}>
                             <div className="otp-container">
                             {otp.map((digit, index) => (
@@ -122,7 +101,7 @@ const ForgetPass = () => {
                                 />
                             ))}
                             </div>
-                        <button className="verify-button">Verify</button>
+                        <button disabled={isVerifying} className="verify-button">{ isVerifying? "verifying...": "Verify"}</button>
                     </form>
 
                     <div className="separator"></div>
