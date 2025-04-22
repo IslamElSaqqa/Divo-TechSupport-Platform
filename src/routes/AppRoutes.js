@@ -10,6 +10,8 @@ import MaintenanceStores from "../components/Home_Components/MaintenanceStores/M
 import Home from "../Pages/Home";
 import Header from "../components/header&footer/header";
 import Footer from "../components/header&footer/footer";
+import WindowsErrors1 from "../components/Windows_Errors/WindowsErrors1";
+import WindowsErrors2 from "../components/Windows_Errors/WindowsErrors2";
 
 // Helper for routes with header and footer
 const RouteWithHeaderFooter = ({ element }) => (
@@ -32,6 +34,10 @@ const AppRoutes = () => {
             <Route path="/pass-changed" element={<RouteWithHeaderFooter element={<PassChanged />} />} />
             <Route path="/home" element={<RouteWithHeaderFooter element={<Home />} />} />
             <Route path="/maintenance-stores" element={<MaintenanceStores />} />
+            <Route path="/windows-errors1" element={<RouteWithHeaderFooter element={<WindowsErrors1 />} />} />
+            <Route path="/windows-errors2" element={<RouteWithHeaderFooter element={<WindowsErrors2 />}/>} />
+            
+
         </Routes>
     );
 };

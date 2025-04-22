@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useResetPass } from '../../Hooks/useResetPass';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Newpassword = () => {
@@ -21,13 +20,11 @@ const Newpassword = () => {
     } 
     else { 
       console.log('failed to reset password')
-      // toast.error('Failed to reset password!')
       return;
     }
 }
   return (
     <div className="content-container">
-        <ToastContainer />
         <div className="side-image">
         <img 
             src="https://dashboard.codeparrot.ai/api/image/Z8dpFdMaYryy9hsO/frame-93.png" 

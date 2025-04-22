@@ -5,8 +5,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
-    // const phoneRegex = /^(010|011|012|015)\d{8}$/;
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // defining register entries using useState
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
@@ -14,9 +12,8 @@ const SignUp = () => {
     const [Email, setEmail] = useState('')
     const navigate = useNavigate(); 
 
-
-        // Grab the signup hook props
-        const { isLoading, error, signup} = useSignup()
+    // Grab the signup hook props
+    const { isLoading, error, signup} = useSignup()
 
 
     // HandleSubmit
@@ -24,14 +21,12 @@ const SignUp = () => {
         e.preventDefault()
 
         // calling signup function from the hook 
-        const success = await signup(name, Email, password, phoneNumber)
-        // console.log({ name: name, email: Email, phone: phoneNumber, password: password })
-    
+        const success = await signup(name, Email, password, phoneNumber)    
         // Implementing toast container for successfull snackbar status
         if (success) {
             toast.success('Account created successfully!', {
                 position: 'top-right',
-                autoClose: 2000,
+                autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: false,
@@ -40,10 +35,10 @@ const SignUp = () => {
             // Redirect after a short delay
             setTimeout(() => {
                 navigate('/home');
-            }, 2500);
+            }, 3100);
         }
     };
-    
+
     return (
         <div className="content-container">
             <ToastContainer />

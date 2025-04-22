@@ -53,10 +53,9 @@ const Login = () => {
                     // Redirect after a short delay
                 setTimeout(() => {
                         navigate('/home');
-                    }, 2000);
+                    }, 3100);
             }
         };
-
     return (
         <div className="content-container">
             <ToastContainer />
