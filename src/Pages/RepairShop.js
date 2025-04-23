@@ -92,7 +92,7 @@ const RepairShops = () => {
                 </form>
 
                 <h2 className="section-title-repair-shops">Best Maintenance Stores</h2>
-
+                
                 <div className="stores-list">
                     {displayedStores?.map((store, index) => (
                         <div key={index} className="store-item">
