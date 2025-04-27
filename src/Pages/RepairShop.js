@@ -57,7 +57,7 @@ const RepairShops = () => {
 
         const success = await getRepairShops(inputValue.trim());
         if (success && Array.isArray(repairShops)) {
-            setDisplayedStores(repairShops); //  override on user search
+            setDisplayedStores(repairShops); 
             localStorage.setItem("searchQuery", inputValue);
         }
     };

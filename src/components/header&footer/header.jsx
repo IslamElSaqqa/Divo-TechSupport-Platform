@@ -4,13 +4,15 @@ import classNames from 'classnames';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'
+import { useAuthContext } from '../../Hooks/useAuthContext';
 
 const Header = () => {
     const navigate = useNavigate()
     const isActive = (path) =>{
         return window.location.pathname === path;
     };
-
+    // Get the user from the Auth Context Hook!
+    const { user } = useAuthContext()
     const { logout } = useLogout()
     const handleClick = () => {
                 logout()
@@ -72,21 +74,24 @@ const Header = () => {
                 className="icon"
                 />
                 </a>
-                <a href="/profile-page">
-                <img 
-                    src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/user.png" 
-                    alt="User" 
-                    className="icon"
-                />
-                </a>
-                <div>
-                    <button onClick={ handleClick} className='logout-btn'>logout</button>    
-                </div>        
-            </div>
+                        <a href="/profile-page">
+                        <img 
+                            src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/user.png" 
+                            alt="User" 
+                            className="icon"
+                        />
+                        </a>
+                        {user && (
+                                <div>
+                                    <button onClick={ handleClick} className='logout-btn'>logout</button>    
+                                </div>
+                            )
+                        }
             </div>
         </div>
-        </header>
-    );
+    </div>
+</header>
+);
 };
 
 Header.defaultProps = {
