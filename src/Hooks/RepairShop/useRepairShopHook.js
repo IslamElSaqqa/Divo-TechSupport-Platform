@@ -11,15 +11,12 @@ export const useRepairShop = () => {
     const getRepairShops = async (identifier) => {
         setIsLoading(true);
         setError(null);
-        let decide = "area"
-        const Govs = ["Alexandria", "Cairo"]
 
-        if (Govs.includes(identifier)) { 
-            decide = "gov"
-        }
+        const govList = ["Alexandria", "Cairo"];
+        const queryKey = govList.includes(identifier) ? "gov" : "area";
 
         try {
-            const response = await fetch(`/api/serviceShops?${decide}=${identifier}`, {
+            const response = await fetch(`/api/serviceShops?${queryKey}=${encodeURIComponent(identifier)}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -33,11 +30,12 @@ export const useRepairShop = () => {
             }
             // save the user to local storage in key value pairs
             dispatch({ type: 'GET_REPAIR_SHOPS', payload: json.data});
-            return true;
+            return json.data;
+
         } catch (err) {
             setError(err.message);
-            setIsLoading(false); 
             return false;
+            
         } finally {
             setIsLoading(false); 
         }

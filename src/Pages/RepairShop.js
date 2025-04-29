@@ -1,68 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, {useState} from "react";
 import { useRepairShop } from '../Hooks/RepairShop/useRepairShopHook';
-import { useRepairShopsContext } from "../Hooks/RepairShop/useRepairShopContext";
+
 const storeData = [
-    {
-        name: "Kimo Store", area: "Sidi Beshr", gov: "Alexandria",
-        rating: "5.0", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8"
-    },
-    {
-        name: "Desktop Store", area: "Sidi Beshr", gov: "Alexandria",
-        rating: "4.6", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8"
-    },
-    {
-        name: "Switch Plus Store", area: "Sidi Beshr", gov: "Alexandria",
-        rating: "5.0", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8"
-    },
-    {
-        name: "Professional Store", area: "Sidi Beshr", gov: "Alexandria",
-        rating: "5.0", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8"
-    },
-    {
-        name: "Paragon Laptop Store", area: "Sidi Beshr", gov: "Alexandria",
-        rating: "4.3", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8"
-    },
-    {
-        name: "Al Batool Store", area: "Sidi Beshr", gov: "Alexandria",
-        rating: "3.8", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8"
-    },
+    { name: "Kimo Store", area: "Sidi Beshr", gov: "Alexandria", rating: "5.0", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8" },
+    { name: "Desktop Store", area: "Sidi Beshr", gov: "Alexandria", rating: "4.6", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8" },
+    { name: "Switch Plus Store", area: "Sidi Beshr", gov: "Alexandria", rating: "5.0", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8" },
+    { name: "Professional Store", area: "Sidi Beshr", gov: "Alexandria", rating: "5.0", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8" },
+    { name: "Paragon Laptop Store", area: "Sidi Beshr", gov: "Alexandria", rating: "4.3", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8" },
+    { name: "Al Batool Store", area: "Sidi Beshr", gov: "Alexandria", rating: "3.8", link: "https://maps.app.goo.gl/V5yUZYmYaabXpc5x8" },
 ];
 
 const RepairShops = () => {
-    const [inputValue, setInputValue] = useState("Alexandria");
-    const [displayedStores, setDisplayedStores] = useState(storeData); 
+    const [inputValue, setInputValue] = useState("");
+    const [displayedStores, setDisplayedStores] = useState(storeData);
     const { getRepairShops, error, isLoading } = useRepairShop();
-    const { repairShops } = useRepairShopsContext();
+    const [typingTimeout, setTypingTimeout] = useState(null);
 
-    // Optional: Auto-search on mount (if needed)
-    useEffect(() => {
-        const autoSearch = async () => {
-            const saved = localStorage.getItem("searchQuery");
-            const searchTerm = saved || inputValue;
+    const Stars_count = (rating) => Math.round(rating);
 
-            if (searchTerm.trim()) {
-                const success = await getRepairShops(searchTerm.trim());
-                if (success && Array.isArray(repairShops)) {
-                    setDisplayedStores(repairShops); // override initial data
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+
+        // Clear previous timeout
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+
+        // Set new timeout
+        const timeout = setTimeout(async () => {
+            if (e.target.value.trim()) {
+                const fetchedStores = await getRepairShops(e.target.value.trim());
+                if (fetchedStores && Array.isArray(fetchedStores)) {
+                    setDisplayedStores(fetchedStores);
+                    localStorage.setItem("searchQuery", e.target.value.trim());
                 }
+            } else {
+                setDisplayedStores(storeData);
             }
-        };
+        }, 1000); // 1.2 seconds after typing stops
 
-        autoSearch();
-    }, [inputValue]);
+        setTypingTimeout(timeout);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!inputValue.trim()) return;
 
-        const success = await getRepairShops(inputValue.trim());
-        if (success && Array.isArray(repairShops)) {
-            setDisplayedStores(repairShops); 
-            localStorage.setItem("searchQuery", inputValue);
+        const fetchedStores = await getRepairShops(inputValue.trim());
+        if (fetchedStores && Array.isArray(fetchedStores)) {
+            setDisplayedStores(fetchedStores);
+            localStorage.setItem("searchQuery", inputValue.trim());
         }
     };
-
-    const Stars_count = (rating) => Math.round(rating);
 
     return (
         <div className="content-container">
@@ -77,7 +66,7 @@ const RepairShops = () => {
                                 placeholder="Enter area name or Government"
                                 className="search-input-shops"
                                 value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
+                                onChange={handleInputChange}
                             />
                             <img
                                 src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/componen.png"
@@ -91,8 +80,14 @@ const RepairShops = () => {
                     </div>
                 </form>
 
+                {isLoading && (
+                    <div className="spinner-container">
+                        <div className="spinner"></div>
+                    </div>
+                )}
+
                 <h2 className="section-title-repair-shops">Best Maintenance Stores</h2>
-                
+
                 <div className="stores-list">
                     {displayedStores?.map((store, index) => (
                         <div key={index} className="store-item">
@@ -128,7 +123,7 @@ const RepairShops = () => {
                                 </div>
                             </div>
                             <div className="navigate-wrapper">
-                                <a href={store.link}>
+                                <a href={store.link} target="_blank" rel="noopener noreferrer">
                                     <img
                                         src="https://dashboard.codeparrot.ai/api/image/Z9S4MJIdzXb5OlMf/right-ar.png"
                                         alt="Navigate"
@@ -145,3 +140,5 @@ const RepairShops = () => {
 };
 
 export default RepairShops;
+
+

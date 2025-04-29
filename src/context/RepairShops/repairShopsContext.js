@@ -5,7 +5,7 @@ export const RepairShopsContext = createContext()
 export const repairShopReducer = (state, action) => {
     switch (action.type) { 
         case "GET_REPAIR_SHOPS":
-            return { repairShops: action.payload }
+            return { ...state, repairShops: action.payload } // updated spreading states
         default:
             return state
     }
