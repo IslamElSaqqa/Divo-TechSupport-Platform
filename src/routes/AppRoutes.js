@@ -1,11 +1,21 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "../components/Layout/layout";
-import Login from "../Pages/login";
-import SignUp from "../Pages/signup";
+import Login from "../Pages/AuthenticationPages/login";
+import SignUp from "../Pages/AuthenticationPages/signup";
+import TroubleLogin from "../Pages/AuthenticationPages/troubleLogin"
+import ForgetPass from "../Pages/AuthenticationPages/forgotPassword"; 
+import NewPassword from "../Pages/AuthenticationPages/newPassword"
+import PassChanged from "../Pages/AuthenticationPages/passChanged"
 import MaintenanceStores from "../components/Home_Components/MaintenanceStores/MaintenanceStores";
 import Home from "../Pages/Home";
 import Header from "../components/header&footer/header";
 import Footer from "../components/header&footer/footer";
+import WindowsErrors1 from "../components/Windows_Errors/WindowsErrors1";
+import WindowsErrors2 from "../components/Windows_Errors/WindowsErrors2";
+import RepairShops from "../Pages/RepairShop"
+import Community from "../Pages/Community"
+import Store from "../Pages/Store/Store";
+import StoreCategories from "../Pages/Store/Store Categories";
 
 // Helper for routes with header and footer
 const RouteWithHeaderFooter = ({ element }) => (
@@ -22,10 +32,18 @@ const AppRoutes = () => {
             <Route path="/" element={<RouteWithHeaderFooter element={<Layout />} />} />
             <Route path="/login" element={<RouteWithHeaderFooter element={<Login />} />} />
             <Route path="/signup" element={<RouteWithHeaderFooter element={<SignUp />} />} />
+            <Route path="/trouble-login" element={<RouteWithHeaderFooter element={<TroubleLogin />} />} />
+            <Route path="/ForgetPass" element={<RouteWithHeaderFooter element={<ForgetPass />} />} />
+            <Route path="/newPassword" element={<RouteWithHeaderFooter element={<NewPassword />} />} />
+            <Route path="/pass-changed" element={<RouteWithHeaderFooter element={<PassChanged />} />} />
             <Route path="/home" element={<RouteWithHeaderFooter element={<Home />} />} />
-
-
             <Route path="/maintenance-stores" element={<MaintenanceStores />} />
+            <Route path="/windows-errors1" element={<RouteWithHeaderFooter element={<WindowsErrors1 />} />} />
+            <Route path="/windows-errors2" element={<RouteWithHeaderFooter element={<WindowsErrors2 />}/>} />
+            <Route path="/repair-shops" element={<RouteWithHeaderFooter element={<RepairShops />}/>} />
+            <Route path="/Community" element={<RouteWithHeaderFooter element={<Community />}/>} />
+            <Route path="/store" element={<RouteWithHeaderFooter element={<Store />}/>} />
+            <Route path="/store-categories" element={<RouteWithHeaderFooter element={<StoreCategories  />}/>} />
         </Routes>
     );
 };
