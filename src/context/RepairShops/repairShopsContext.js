@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react'
 
-// Create an windowErrorsContext instance from createContext
+// Create an RepairShopsContext instance from createContext
 export const RepairShopsContext = createContext()
 export const repairShopReducer = (state, action) => {
     switch (action.type) { 

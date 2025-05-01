@@ -16,6 +16,9 @@ import RepairShops from "../Pages/RepairShop"
 import Community from "../Pages/Community"
 import Store from "../Pages/Store/Store";
 import StoreCategories from "../Pages/Store/Store Categories";
+import OnlineServicing from "../Pages/OnlineServicing/OnlineServicing"
+import RequestSuccess from "../Pages/OnlineServicing/RequestSuccess";
+import Tech from "../Pages/Techinician/tech"
 
 // Helper for routes with header and footer
 const RouteWithHeaderFooter = ({ element }) => (
@@ -44,6 +47,10 @@ const AppRoutes = () => {
             <Route path="/Community" element={<RouteWithHeaderFooter element={<Community />}/>} />
             <Route path="/store" element={<RouteWithHeaderFooter element={<Store />}/>} />
             <Route path="/store-categories" element={<RouteWithHeaderFooter element={<StoreCategories  />}/>} />
+            <Route path="/online-servicing" element={<RouteWithHeaderFooter element={<OnlineServicing  />}/>} />
+            <Route path="/online-servicing/request-success" element={<RouteWithHeaderFooter element={<RequestSuccess />}/>}/>
+            <Route path="/it-interface" element={<RouteWithHeaderFooter element={<Tech />}/>}/>
+        
         </Routes>
     );
 };

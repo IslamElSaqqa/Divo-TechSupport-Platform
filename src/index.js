@@ -6,6 +6,8 @@ import { AuthContextProvider } from './context/AuthContext/AuthContext';
 import { WindowsErrorsContextProvider } from './context/WindowsErrors/windowsErrorsContext';
 import { RepairShopsContextProvider } from './context/RepairShops/repairShopsContext';
 import { ScraperProvider } from './context/ScrapingContext/ScraperContext';
+import { OnlineServiceContextProvider } from './context/OnlineServicing/onlineServicingContext';
+import { TechContextProvider } from './context/Technician/technicianContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -13,7 +15,11 @@ root.render(
       <WindowsErrorsContextProvider>
         <RepairShopsContextProvider>
             <ScraperProvider>
-                <App />
+                <OnlineServiceContextProvider>
+              <TechContextProvider >
+                  <App />
+              </TechContextProvider>
+                </OnlineServiceContextProvider>
             </ScraperProvider>
           </RepairShopsContextProvider>
       </WindowsErrorsContextProvider>
