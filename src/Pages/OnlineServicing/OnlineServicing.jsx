@@ -23,10 +23,10 @@ const OnlineServicing = () => {
       setTimeout(() => navigate('/login'), 2000);
       return;
     }
-    const selectedSpecialistId = "67d889a81a9fb45d5d583a19"
+    // const selectedSpecialistId = "67d889a81a9fb45d5d583a19"
     const sessionData = {
       user: user._id,
-      specialist: selectedSpecialistId,
+      // specialist: selectedSpecialistId,
       instapay_reference: refId,
       steps: steps,
       description: description,

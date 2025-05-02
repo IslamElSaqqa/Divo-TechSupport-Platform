@@ -13,9 +13,10 @@ export const useGetTechnicianContext = () => {
         setError(null);
 
         try {
-            const token = sessionStorage.getItem("Technician")
-                ? JSON.parse(sessionStorage.getItem("Technician")).token : null;
+            // const token = sessionStorage.getItem("Technician")
+            //     ? JSON.parse(sessionStorage.getItem("Technician")).token : null;
             
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODEyMzZkNjM3NTE1MTg4Mzk4MzQxNTYiLCJpYXQiOjE3NDYxMDUwNzIsImV4cCI6MTc0NjUzNzA3Mn0.yJVBdWpG3agm54zSISygri47qKU0Og6j20mb-g3Uxfc"
             // Decode the token to get the technician ID
             const decoded = jwtDecode(token);
             const technicianId = decoded._id;  

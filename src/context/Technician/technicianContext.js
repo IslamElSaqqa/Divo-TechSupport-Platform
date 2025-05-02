@@ -6,12 +6,7 @@ export const techReducer = (state, action) => {
     switch (action.type) { 
         case 'GET_TECHNICIAN':
             return {
-                technician: action.payload,
-                ...state
-            }
-        case 'LOGIN':
-            return {
-                type: action.payload
+                ...state, technician: action.payload,
             }
         default:
             return state

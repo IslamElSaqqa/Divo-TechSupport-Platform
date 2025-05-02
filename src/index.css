@@ -3542,6 +3542,8 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
+  position: relative;
+  margin-left: 300px;
 }
 
 .post-btn:hover {
@@ -4853,4 +4855,3 @@ img {
     transform: rotate(360deg);
   }
 }
-

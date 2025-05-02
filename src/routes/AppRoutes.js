@@ -13,7 +13,7 @@ import Footer from "../components/header&footer/footer";
 import WindowsErrors1 from "../components/Windows_Errors/WindowsErrors1";
 import WindowsErrors2 from "../components/Windows_Errors/WindowsErrors2";
 import RepairShops from "../Pages/RepairShop"
-import Community from "../Pages/Community"
+import Community from "../Pages/Community/Community"
 import Store from "../Pages/Store/Store";
 import StoreCategories from "../Pages/Store/Store Categories";
 import OnlineServicing from "../Pages/OnlineServicing/OnlineServicing"
@@ -49,8 +49,7 @@ const AppRoutes = () => {
             <Route path="/store-categories" element={<RouteWithHeaderFooter element={<StoreCategories  />}/>} />
             <Route path="/online-servicing" element={<RouteWithHeaderFooter element={<OnlineServicing  />}/>} />
             <Route path="/online-servicing/request-success" element={<RouteWithHeaderFooter element={<RequestSuccess />}/>}/>
-            <Route path="/it-interface" element={<RouteWithHeaderFooter element={<Tech />}/>}/>
-        
+            <Route path="/it-interface" element={<RouteWithHeaderFooter element={<Tech />}/>}/> 
         </Routes>
     );
 };

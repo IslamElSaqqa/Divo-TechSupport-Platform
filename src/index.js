@@ -8,6 +8,7 @@ import { RepairShopsContextProvider } from './context/RepairShops/repairShopsCon
 import { ScraperProvider } from './context/ScrapingContext/ScraperContext';
 import { OnlineServiceContextProvider } from './context/OnlineServicing/onlineServicingContext';
 import { TechContextProvider } from './context/Technician/technicianContext';
+import { CommunityContextProvider } from './context/Community/communityContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -16,9 +17,11 @@ root.render(
         <RepairShopsContextProvider>
             <ScraperProvider>
                 <OnlineServiceContextProvider>
-              <TechContextProvider >
-                  <App />
-              </TechContextProvider>
+                  <TechContextProvider >
+                    <CommunityContextProvider> 
+                        <App />
+                    </CommunityContextProvider>
+                  </TechContextProvider>
                 </OnlineServiceContextProvider>
             </ScraperProvider>
           </RepairShopsContextProvider>

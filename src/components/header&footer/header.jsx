@@ -1,39 +1,17 @@
 import React from 'react';
-import { useLogout } from '../../Hooks/useLogout';
 import classNames from 'classnames';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom'
+import ProfileDropdown from "./Profile/ProfileDropdown"
 import { useAuthContext } from '../../Hooks/useAuthContext';
 
 const Header = () => {
-    const navigate = useNavigate()
     const isActive = (path) =>{
         return window.location.pathname === path;
     };
-    // Get the user from the Auth Context Hook!
-    const { user } = useAuthContext()
-    const { logout } = useLogout()
-    const handleClick = () => {
-                logout()
-                toast.success('Logged out successfully!', {
-                        position: 'top-right',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                });
-                    // Redirect after a short delay
-                setTimeout(() => {
-                        navigate('/login');
-                    }, 2000);
-            }
 
+    const { user } = useAuthContext()
 
     return (
         <header className="header">
-            <ToastContainer />
         <div className="header-container">
             
             <a href="/home" >
@@ -74,19 +52,8 @@ const Header = () => {
                 className="icon"
                 />
                 </a>
-                        <a href="/profile-page">
-                        <img 
-                            src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/user.png" 
-                            alt="User" 
-                            className="icon"
-                        />
-                        </a>
-                        {user && (
-                                <div>
-                                    <button onClick={ handleClick} className='logout-btn'>logout</button>    
-                                </div>
-                            )
-                        }
+                {user && (<ProfileDropdown />)}
+                        
             </div>
         </div>
     </div>
