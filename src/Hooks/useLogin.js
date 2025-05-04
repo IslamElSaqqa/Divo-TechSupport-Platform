@@ -7,7 +7,7 @@ export const useLogin =  () => {
     const [isLoading, setIsLoading] = useState(null)
 
     const { dispatch } = useAuthContext()
-
+    const { user } = useAuthContext()
     const login = async (identifier, password) => {
         
         // tracking error states
@@ -31,12 +31,18 @@ export const useLogin =  () => {
         }
 
         if (response.ok) { 
+            
+            const normalizedUser = {
+                _id: json.userId,
+                email: json.identifier,
+                token: json.token,
+            };
+            
             // save the user to local storage in key value pairs
-            sessionStorage.setItem('user', JSON.stringify(json))
-
+            sessionStorage.setItem('user', JSON.stringify(normalizedUser));
             // update auth context using dispatch from useReducer 
             // (Type: '', payload: '')
-            dispatch({ type: 'LOGIN', payload: json })
+            dispatch({ type: 'LOGIN', payload: normalizedUser })
             return true;
         }
             

@@ -13,7 +13,11 @@ export const authReducer = (state, action) => {
         case 'VERIFY_OTP':
             return { user: action.payload}
         case 'RESET_PASSWORD':
-            return { user: action.payload}
+            return { user: action.payload }
+        case 'UPDATE_PROFILE':
+            return { user: action.payload }
+        case 'GET_PROFILE':
+            return {user: action.payload}
         default:
             return state
     }
@@ -28,7 +32,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem('user'))
         dispatch({type: 'LOGIN', payload: user})
-    }, [dispatch])
+    }, [])
 
     return (
         // passing props to the provider to wrap 

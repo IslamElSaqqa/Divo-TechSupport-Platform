@@ -1,14 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import ProfileDropdown from "./Profile/ProfileDropdown"
-import { useAuthContext } from '../../Hooks/useAuthContext';
+
 
 const Header = () => {
     const isActive = (path) =>{
         return window.location.pathname === path;
     };
-
-    const { user } = useAuthContext()
 
     return (
         <header className="header">
@@ -52,7 +50,7 @@ const Header = () => {
                 className="icon"
                 />
                 </a>
-                {user && (<ProfileDropdown />)}
+                <ProfileDropdown />
                         
             </div>
         </div>

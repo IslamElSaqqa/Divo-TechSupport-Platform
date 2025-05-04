@@ -19,7 +19,9 @@ import StoreCategories from "../Pages/Store/Store Categories";
 import OnlineServicing from "../Pages/OnlineServicing/OnlineServicing"
 import RequestSuccess from "../Pages/OnlineServicing/RequestSuccess";
 import Tech from "../Pages/Techinician/tech"
-
+import ProfilePage from "../Pages/Profile/ProfilePage";
+import ContactUs from "../components/header&footer/Footer Links (US)/ContactUs";
+import AboutUs from "../components/header&footer/Footer Links (US)/AboutUs";
 // Helper for routes with header and footer
 const RouteWithHeaderFooter = ({ element }) => (
     <>
@@ -50,6 +52,10 @@ const AppRoutes = () => {
             <Route path="/online-servicing" element={<RouteWithHeaderFooter element={<OnlineServicing  />}/>} />
             <Route path="/online-servicing/request-success" element={<RouteWithHeaderFooter element={<RequestSuccess />}/>}/>
             <Route path="/it-interface" element={<RouteWithHeaderFooter element={<Tech />}/>}/> 
+            <Route path="/profile-page" element={<RouteWithHeaderFooter element={<ProfilePage />}/>}/> 
+            <Route path="/contact-us" element={<RouteWithHeaderFooter element={<ContactUs/>}/>}/> 
+            <Route path="/about-us" element={<RouteWithHeaderFooter element={<AboutUs/>}/>}/> 
+
         </Routes>
     );
 };

@@ -3105,6 +3105,8 @@ textarea:focus {
     background: inherit;
     font-family: 'Poppins', sans-serif;
     color: #fab261;
+    position: relative;
+    margin-bottom: 500px;
   }
   
   .sidebar-title {
@@ -3113,6 +3115,7 @@ textarea:focus {
     line-height: 24px;
     color: #000000;
     margin: 0 0 16px 0;
+    font-weight: bold;
   }
   
   .sidebar-section {
@@ -3177,7 +3180,7 @@ textarea:focus {
   
   .form-group {
     flex: 1;
-    min-width: 300px;
+    min-width: 600px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -4854,4 +4857,7 @@ img {
   to {
     transform: rotate(360deg);
   }
+}
+.ProfileUsername{
+  color: #f26e39;
 }

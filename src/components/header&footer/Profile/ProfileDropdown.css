@@ -7,11 +7,11 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #f9a862;
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: rgb(20, 12, 12);
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -32,7 +32,7 @@
   top: 100%;
   margin-top: 8px;
   width: 240px;
-  background: linear-gradient(to bottom, #f97316, #c2580e);
+  background: transparent;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 100;
@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   padding: 16px;
-  color: white;
+  color: black;
   text-decoration: none;
   font-size: 16px;
   transition: background-color 0.2s;
@@ -62,6 +62,9 @@
   width: 20px;
   height: 20px;
   margin-right: 16px;
-  color: white;
+  color: rgba(228, 46, 18, 0.67);
   flex-shrink: 0;
+}
+.logout-keyword{
+  font-weight: bold;
 }
