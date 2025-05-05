@@ -68,7 +68,7 @@ const ContactFormSection = () => {
         setName('')
         setPhone('')
         setMessage('')
-        toast.success('Logged In successfully!', {
+        toast.success('Message sent successfully!', {
               position: 'top-right',
               autoClose: 3000,
               hideProgressBar: false,

@@ -51,7 +51,7 @@ const Community = () => {
     }
   };
     fetchPosts()
-  }, [ user,dispatch])
+  }, [user, dispatch])
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -230,7 +230,7 @@ const Community = () => {
                         src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/thumbs-up.png" 
                         alt="Like" 
                       />
-                      <img 
+                      <img
                         src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/vector.png" 
                         alt="Heart" 
                         className="heart-icon" 
