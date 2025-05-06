@@ -3,12 +3,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import RTX5090 from "../../Videos/RTX 5090 Video.mp4";
-import HelpDesk from "../../Videos/HelpDesk.mp4";
-import Laptop from "../../Videos/Laptop.mp4";
-import RepairShops from "../../Videos/RepairShops.mp4";
-import GameChanger from "../../Videos/GameChanger.mp4";
-
 const Carousel = () => {
   const sliderRef = useRef(null);
 
@@ -40,11 +34,11 @@ const Carousel = () => {
   };
 
   const videoSlides = [
-    RTX5090,
-    GameChanger,
-    HelpDesk,
-    Laptop,
-    RepairShops
+    "https://res.cloudinary.com/dr9yx1tod/video/upload/v1745960487/uploaded_Videos/video-1745960335615.mp4",
+    "https://res.cloudinary.com/dr9yx1tod/video/upload/v1745960307/uploaded_Videos/video-1745960198748.mp4",
+    "https://res.cloudinary.com/dr9yx1tod/video/upload/v1745960178/uploaded_Videos/video-1745960000506.mp4",
+    "https://res.cloudinary.com/dr9yx1tod/video/upload/v1745958400/uploaded_Videos/video-1745958309042.mp4",
+    "https://res.cloudinary.com/dr9yx1tod/video/upload/v1745955261/RepairShops_lqfxb9.mp4"
   ];
 
   const handleVideoEnd = () => {
@@ -65,7 +59,7 @@ const Carousel = () => {
                   <video
                   muted
                   autoPlay
-                  onEnded={handleVideoEnd} // 👈 when video ends go to next
+                  onEnded={handleVideoEnd}
                     className="background-video"
                   >
                     <source src={video} type="video/mp4" />

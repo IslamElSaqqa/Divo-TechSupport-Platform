@@ -1,127 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import axios from "axios";
 import { useScraper } from "../../context/ScrapingContext/ScraperContext";
+
 const Store = () => {
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState("");
+  const { setScrapedData } = useScraper();
+  const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
-  const { setScrapedData } = useScraper();
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setError(null);
+    setLoading(true);
+
     if (!inputValue.trim()) {
       setError("Please enter the product name!");
       setLoading(false);
       return;
     }
-    //  Clear previous data before starting new search
-    localStorage.removeItem("scrapedData");
+
+    localStorage.removeItem('scrapedData');
     setScrapedData(null);
+
     try {
-      const response = await axios.get(
-        `http://localhost:4000/api/scraping/scrapeAll?productName=${encodeURIComponent(
-          inputValue.trim()
-        )}`
-      );
-      setScrapedData(response.data); // save it to context
-      navigate(
-        `/store-categories?productName=${encodeURIComponent(inputValue.trim())}`
-      ); // navigate after fetching
+      const response = await axios.get(`http://localhost:4000/api/scraping/scrapeAll?productName=${encodeURIComponent(inputValue.trim())}`);
+      setScrapedData(response.data);
+      navigate(`/store-categories?productName=${encodeURIComponent(inputValue.trim())}`);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch product data.");
-      setLoading(false);
     }
+    setLoading(false);
   };
 
+  // 🚀 New function to handle category click
   const handleCategoryClick = async (categoryName) => {
     setError(null);
     setInputValue(categoryName);
     setLoading(true);
 
     try {
-        const response = await axios.get(`http://localhost:4000/api/scraping/scrapeAll?productName=${encodeURIComponent(categoryName.trim())}`);
-        setScrapedData(response.data);
-        navigate(`/store-categories?productName=${encodeURIComponent(categoryName.trim())}`);
+      const response = await axios.get(`http://localhost:4000/api/scraping/scrapeAll?productName=${encodeURIComponent(categoryName.trim())}`);
+      setScrapedData(response.data);
+      navigate(`/store-categories?productName=${encodeURIComponent(categoryName.trim())}`);
     } catch (err) {
-        console.error(err);
-        setError("Failed to fetch product data.");
+      console.error(err);
+      setError("Failed to fetch product data.");
     }
     setLoading(false);
-};
-
+  };
 
   const categories = [
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/image.png",
-      name: "CPU",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse.png",
-      name: "GPU",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-2.png",
-      name: "PC Tower",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/monitor.png",
-      name: "Monitor",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/cooler-1.png",
-      name: "CPU Cooler",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/mouse-1.png",
-      name: "Mouse",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-4.png",
-      name: "ROM",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/laptop-r.png",
-      name: "Laptop",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-5.png",
-      name: "RAM",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/computer.png",
-      name: "PC",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/usb-2.png",
-      name: "Cables",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/security.png",
-      name: "Camera",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/computer-2.png",
-      name: "Speaker",
-    },
-    {
-      icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/usb-1.png",
-      name: "Network devices",
-    },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/image.png", name: "CPU" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse.png", name: "GPU" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-2.png", name: "PC Tower" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/monitor.png", name: "Monitor" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/cooler-1.png", name: "Cooler" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/mouse-1.png", name: "Mouse" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-4.png", name: "ROM" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/laptop-r.png", name: "Laptop" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-5.png", name: "RAM" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/computer.png", name: "PC" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/usb-2.png", name: "Cables" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/security.png", name: "Camera" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/computer-2.png", name: "Speaker" },
+    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/usb-1.png", name: "Network devices" }
   ];
 
   return (
     <div className="content-container">
       <div className="search-container-error">
         <h1 className="DIVO-logo-error">
-          <span className="orange-text">D</span>IVO{" "}
-          <span className="orange-text">STORE</span>
+          <span className="orange-text">D</span>IVO <span className="orange-text">STORE</span>
         </h1>
-        {error && <div className="error"> {error}</div>}
+
+        {error && <div className="error">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="search-box-container-error">
             <div className="search-input-error">
@@ -141,7 +97,6 @@ const Store = () => {
         {loading && (
           <div className="spinner-container">
             <div className="spinner"></div>
- 
           </div>
         )}
 
@@ -165,6 +120,7 @@ const Store = () => {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

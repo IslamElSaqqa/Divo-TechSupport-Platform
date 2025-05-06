@@ -149,10 +149,7 @@ const StoreCategories = () => {
                 </div>
 
                 <div className="products-scroll-container">
-                  <div
-                    className="products-container"
-                    ref={scrollContainers[store]}
-                  >
+                  <div className="products-container" ref={scrollContainers[store]}>
                     {scrapedData[store] &&
                     Array.isArray(scrapedData[store].products) &&
                     scrapedData[store].products.length > 0 ? (
