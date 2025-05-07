@@ -22,6 +22,14 @@ export const communityReducer = (state, action) => {
                 ...state,
                 posts: state.posts.filter((p)=> p._id !== action.payload._id)
             }
+        case 'UPDATE_POST':
+            return {
+                ...state,
+                posts: state.posts.map((post) =>
+                post._id === action.payload.postId
+                    ? { ...post, content: action.payload.content } : post
+        ),
+        };
         default:
             return state
     }

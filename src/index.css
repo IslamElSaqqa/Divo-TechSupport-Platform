@@ -2835,7 +2835,6 @@ a:hover {
   height: 40px;
 }
 
-
 .section-title {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
@@ -4879,4 +4878,64 @@ img {
 }
 .ProfileUsername{
   color: #f26e39;
+}
+.icon-community{
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border-radius: 50px;
+}
+.icon-community:hover{
+  
+  background-color:orange;
+}
+
+.edit-textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #d86a10;
+  border-radius: 10px;
+  resize: vertical;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.edit-textarea:focus {
+  border-color: #ff7f50; /* Coral/orange highlight */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
+}
+
+.save-btn, .cancel-btn {
+  padding: 6px 14px;
+  margin-right: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-btn {
+  background-color: #28a745; /* Green */
+  color: white;
+  border: none;
+}
+
+.save-btn:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  color: #dc3545; /* Red */
+  border: 1px solid #dc3545;
+}
+
+.cancel-btn:hover {
+  background-color: #dc3545;
+  color: white;
 }

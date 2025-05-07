@@ -5,6 +5,8 @@ import { useCreatePost } from '../../Hooks/Community/useCreatePost';
 import { useAuthContext } from '../../Hooks/useAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useCommunityContext } from '../../Hooks/Community/useCommunityContext';
+import { useDeletePost } from '../../Hooks/Community/useDeletePost';
+import { useUpdatePost } from "../../Hooks/Community/useUpdatePost"
 
 const Community = () => {
   const [content, setContent] = useState('');
@@ -15,11 +17,16 @@ const Community = () => {
   const [loading, setLoading] = useState(true); 
   const { user } = useAuthContext();
   const { posts, dispatch } = useCommunityContext()
+  const { deletePost, isDeleteLoading, deleteError } = useDeletePost();
+  const { updatePost, updateError, isUpdateLoading } = useUpdatePost()
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const isFetchingRef = useRef(false);
   const fileInputRef = useRef();
   const navigate = useNavigate();
+  const [editingPostId, setEditingPostId] = useState(null);
+  const [editedContent, setEditedContent] = useState('');
+
 
   useEffect(() => {
     fetchPosts(1); // Initial fetch on mount
@@ -114,6 +121,59 @@ const Community = () => {
     }
   };
 
+
+  // handle delete
+  const handleDelete = async (postId) => {
+    const success = await deletePost(postId);
+    if (success) {
+      toast.success('Post deleted successfully', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
+    } else {
+      toast.error('Failed to delete post', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  };
+
+  // handle Edit Click before Update
+
+  const handleEditClick = (postId, currentContent) => {
+    setEditingPostId(postId);
+    setEditedContent(currentContent);
+  };
+
+
+  const handleUpdate = async (postId) => {
+
+    // Call the updatePost function when ready to update
+    const success = await updatePost(postId, editedContent);
+
+    if (success) {  
+      dispatch({
+        type: 'UPDATE_POST',
+        payload: {
+          postId,
+          content: editedContent,
+        },
+      });
+      toast.success('Post updated successfully', {
+        position: 'top-right',
+        autoClose: 1500,
+      });
+      setTimeout(() => {  window.location.reload(); },2000)
+      
+    } else {
+      toast.error('Failed to update post', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  };
+  
+
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -164,27 +224,32 @@ const Community = () => {
               </div>
 
               {/* Post image preview under textarea */}
-              {imageUpload && (
-                <div className="post-preview-image">
-                  <img src={imageUpload} alt="Post preview" className="post-image" />
-                </div>
-              )}
 
               {uploading && (
                 <div className="spinner-container">
-                  <div className="spinner"></div> 
+                  <div className="spinner"></div>
                 </div>
               )}
             </div>
-
+            <div>
+              {imageUpload && (
+                <div className="post-preview-image">
+                  <img
+                    src={imageUpload}
+                    alt="Post preview"
+                    className="post-image"
+                  />
+                </div>
+              )}
+            </div>
             <div className="actions-button">
               <div className="actions">
                 <button
                   className="action-btn"
-                  type='button'
+                  type="button"
                   onClick={() => {
-                    if (!user) return
-                    fileInputRef.current.click()
+                    if (!user) return;
+                    fileInputRef.current.click();
                   }}
                 >
                   <img
@@ -197,8 +262,8 @@ const Community = () => {
                   accept=".png,.jpg"
                   ref={fileInputRef}
                   onChange={handleFileChange}
-                  style={{ display: 'none' }}
-                  disabled={ uploading}
+                  style={{ display: "none" }}
+                  disabled={uploading}
                 />
 
                 <button className="action-btn" type="button">
@@ -208,119 +273,154 @@ const Community = () => {
                   />
                 </button>
               </div>
-              <button disabled={isLoading || uploading } className="post-btn" type="submit">
-                    POST
+              <button
+                disabled={isLoading || uploading}
+                className="post-btn"
+                type="submit"
+              >
+                POST
               </button>
             </div>
           </div>
         </form>
 
         {loading && (
-                    <div className="spinner-container">
-                        <div className="spinner"></div>
-                    </div>
-                )}
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+        )}
 
         {/* Render Posts */}
         <div className="posts-list">
           {Array.isArray(posts) && posts.length > 0 ? (
-            posts.map(post => (
+            posts.map((post) => (
               <div key={post._id} className="social-post">
                 <div className="post-header">
                   <div className="user-info">
-                    <img 
-                      src={post.user.avatar || "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"} 
-                      alt="User avatar" 
-                      className="avatar" 
+                    <img
+                      src={
+                        post.user.avatar ||
+                        "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"
+                      }
+                      alt="User avatar"
+                      className="avatar"
                     />
                     <div className="user-details">
-                      <h3 className="username">{post.user.username || "Unknown User"}</h3>
+                      <h3 className="username-community">
+                        {post.user.username || "Unknown User"}
+                      </h3>
                     </div>
                   </div>
-                  <img 
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/dots-thre.png" 
-                    alt="Menu" 
-                    className="menu-icon" 
-                  />
+                  <div>
+  
+                  {user && post.user._id === user._id && (
+                    <>
+                      {/*Update functionality */}
+                      
+                        <img disabled={ isUpdateLoading} onClick={()=>handleEditClick(post._id, post.content)}
+                          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553462/edit-regular-240_rticyf.png"
+                          alt="Edit Menu"
+                          className="menu-icon"
+                        />
+
+                      {/* Delete Functionality */}
+                        <img onClick={() => handleDelete(post._id)}
+                          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553320/trash-regular-240_veohgh.png"
+                          alt="Delete Menu"
+                          className="menu-icon"
+                        />
+                    </>
+                  )}
+                </div>
+
+
                 </div>
 
                 <div className="post-content">
-                  <p className="content-text">
-                    {post.content} <span className="orange-text">#mynewsetup</span>
-                  </p>
+                {editingPostId === post._id ? (
+                  <>
+                    <textarea
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      rows={3}
+                      className="edit-textarea"
+                    />
+                      <button disabled={isUpdateLoading}
+                        onClick={() => handleUpdate(post._id)} className="save-btn">
+                          Save
+                      </button>
+                    <button onClick={() => setEditingPostId(null)} className="cancel-btn">
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <p className="content-text">{post.content}</p>
+                  )}
+                  
+
                   {post.image_url && (
-                    <img src={post.image_url} alt="Post content" className="content-image" />
+                    <img
+                      src={post.image_url}
+                      alt="Post content"
+                      className="content-image"
+                    />
                   )}
                 </div>
 
                 <div className="post-stats">
                   <div className="stats-group">
                     <div className="stat-item">
-                      <img 
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/thumbs-up.png" 
-                        alt="Like" 
+                      <img
+                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/thumbs-up.png"
+                        alt="Like"
                       />
                       <img
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/vector.png" 
-                        alt="Heart" 
-                        className="heart-icon" 
+                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/vector.png"
+                        alt="Heart"
+                        className="heart-icon"
                       />
                       <span>{post.likes} Likes</span>
                     </div>
                     <div className="stat-item">
-                      <img 
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/chat-dots.png" 
-                        alt="Comment" 
+                      <img
+                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/chat-dots.png"
+                        alt="Comment"
                       />
                       <span>{post.comments} Comments</span>
                     </div>
-                    <div className="stat-item">
-                      <img 
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/share-fat.png" 
-                        alt="Share" 
-                      />
-                      <span>{post.shares} Share</span>
-                    </div>
                   </div>
-                  <img 
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/bookmark.png" 
-                    alt="Bookmark" 
-                    className="bookmark-icon" 
-                  />
                 </div>
 
                 <div className="post-comment">
-                  <img 
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-3.png" 
-                    alt="User avatar" 
-                    className="avatar" 
+                  <img
+                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-3.png"
+                    alt="User avatar"
+                    className="avatar"
                   />
-                  <input 
-                    type="text" 
-                    placeholder="Write your comment.." 
-                    className="comment-input" 
+                  <input
+                    type="text"
+                    placeholder="Write your comment.."
+                    className="comment-input"
                   />
                   <div className="comment-actions">
-                    
-                    <img 
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-2.png" 
-                      alt="Action 2" 
-                      className="action-icon" 
+                    <img
+                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-2.png"
+                      alt="Action 2"
+                      className="action-icon"
                     />
-                    <img 
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png" 
-                      alt="Action 3" 
-                      className="action-icon" 
+                    <img
+                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
+                      alt="Action 3"
+                      className="action-icon"
                     />
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div>No posts yet.</div>
+            <span className="orange-text-posts">No Posts Yet!</span>
           )}
         </div>
-
       </main>
     </div>
   );

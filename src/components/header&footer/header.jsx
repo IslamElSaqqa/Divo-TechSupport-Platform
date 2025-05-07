@@ -47,7 +47,7 @@ const Header = () => {
                 <img 
                 src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/communit.png" 
                 alt="Community" 
-                className="icon"
+                className="icon-community"
                 />
                 </a>
                 <ProfileDropdown />
