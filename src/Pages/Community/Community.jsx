@@ -8,18 +8,26 @@ import { useCommunityContext } from '../../Hooks/Community/useCommunityContext';
 import { useDeletePost } from '../../Hooks/Community/useDeletePost';
 import { useUpdatePost } from "../../Hooks/Community/useUpdatePost"
 import { useTogglePost } from '../../Hooks/Community/useTogglePost';
+import { useAddComment } from '../../Hooks/Community/useAddComment';
+
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+import { useClickOutside } from '../../Hooks/Community/useClickOutside'; 
+
 const Community = () => {
   const [content, setContent] = useState('');
   const [imageUpload, setImageUpload] = useState('');
   const [uploading, setUploading] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [commentInputs, setCommentInputs] = useState({});
   const { isLoading, error, createPost } = useCreatePost();
   const [loading, setLoading] = useState(true); 
   const { user } = useAuthContext();
   const { posts, dispatch } = useCommunityContext()
   const { deletePost, isDeleteLoading, deleteError } = useDeletePost();
   const { updatePost, updateError, isUpdateLoading } = useUpdatePost()
-  const { isLoadingToggle, errorToggle, togglePost} = useTogglePost()
+  const { isLoadingToggle, errorToggle, togglePost } = useTogglePost();
+  const { isLoadingComment, errorAddingComment, addComment } = useAddComment()
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const isFetchingRef = useRef(false);
@@ -28,6 +36,30 @@ const Community = () => {
   const [editingPostId, setEditingPostId] = useState(null);
   const [editedContent, setEditedContent] = useState('');
 
+  // For Creating Post section with emoji picker!
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null);
+  useClickOutside(emojiPickerRef, () => setShowEmojiPicker(false));
+
+
+
+  // appending emojis to either the content or the updated content
+  const handleEmojiSelect = (emoji) => {
+    if (editingPostId) {
+      setEditedContent((prev) => prev + emoji.native);
+    } else {
+      setContent((prev) => prev + emoji.native);
+    }
+  };
+
+
+
+  const handleEmojiClick = (emojiObject, postId) => {
+  setCommentInputs((prevInputs) => ({
+    ...prevInputs,
+    [postId]: (prevInputs[postId] || "") + emojiObject.emoji
+  }));
+};
 
   useEffect(() => {
     fetchPosts(1); // Initial fetch on mount
@@ -196,6 +228,24 @@ const Community = () => {
     }
   };
 
+  // handle Adding Comment
+  const handleAddComment = async (postId, navigate) => {
+
+  const comment = commentInputs[postId]?.trim();
+  if (!comment) return;
+
+  const success = await addComment(postId, comment, navigate);
+
+  if (success) {
+    toast.success("Comment added!", {autoClose: 1500});
+    setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
+
+  } else {
+      toast.error("Failed to add comment.");
+  }
+};
+
+
 // Check whether user liked the post or not!
   const hasUserLiked = (post) => {
     return user && Array.isArray(post.likedBy) && post.likedBy.includes(user._id);
@@ -210,7 +260,8 @@ const Community = () => {
         {error && <div className="error">{error}</div>}
         {deleteError && <div className="error">{deleteError}</div>}
         {updateError && <div className="error">{updateError}</div>}
-        {errorToggle && <div className='error'>{ errorToggle}</div>}
+        {errorToggle && <div className='error'>{errorToggle}</div>}
+        {errorAddingComment && <div className='error'>{ errorAddingComment}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="create-post">
@@ -274,12 +325,26 @@ const Community = () => {
                   disabled={uploading}
                 />
 
-                <button className="action-btn" type="button">
-                  <img
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/emoji.png"
-                    alt="Emoji"
-                  />
-                </button>
+                <div className="emoji-wrapper" ref={emojiPickerRef}>
+                  <button
+                    className="action-btn"
+                    type="button"
+                    onClick={() => setShowEmojiPicker((prev) => !prev)}
+                  >
+                    <img
+                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/emoji.png"
+                      alt="Emoji"
+                    />
+                  </button>
+
+                  {showEmojiPicker && (
+                    <div className="emoji-picker-dropdown" onClick={(e) => e.stopPropagation()}>
+                      <Picker data={data} onEmojiSelect={handleEmojiSelect} theme="light"
+                      />
+                    </div>
+                  )}
+                </div>
+
               </div>
               <button
                 disabled={isLoading || uploading}
@@ -325,14 +390,16 @@ const Community = () => {
                     <>
                       {/*Update functionality */}
                       
-                        <img disabled={ isUpdateLoading} onClick={()=>handleEditClick(post._id, post.content)}
-                          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553462/edit-regular-240_rticyf.png"
-                          alt="Edit Menu"
-                          className="menu-icon"
+                        <img onClick={() => !isUpdateLoading && handleEditClick(post._id, post.content)}
+                            style={{ cursor: isUpdateLoading ? 'not-allowed' : 'pointer', opacity: isUpdateLoading ? 0.6 : 1 }}
+                            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553462/edit-regular-240_rticyf.png"
+                            alt="Edit Menu"
+                            className="menu-icon"
                         />
 
                       {/* Delete Functionality */}
-                        <img disabled={ isDeleteLoading} onClick={() => handleDelete(post._id)}
+                        <img onClick={() => !isDeleteLoading && handleDelete(post._id)}
+                            style={{ cursor: isDeleteLoading ? 'not-allowed' : 'pointer', opacity: isDeleteLoading ? 0.6 : 1 }}
                           src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553320/trash-regular-240_veohgh.png"
                           alt="Delete Menu"
                           className="menu-icon"
@@ -340,9 +407,7 @@ const Community = () => {
                     </>
                   )}
                 </div>
-
-
-                </div>
+              </div>
 
                 <div className="post-content">
                 {editingPostId === post._id ? (
@@ -418,20 +483,52 @@ const Community = () => {
                     type="text"
                     placeholder="Write your comment.."
                     className="comment-input"
+                    value={commentInputs[post._id] || ""}
+                    onChange={(e) =>
+                      setCommentInputs({ ...commentInputs, [post._id]: e.target.value })
+                    }
                   />
-                  <div className="comment-actions">
-                    <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-2.png"
-                      alt="Action 2"
-                      className="action-icon"
-                    />
-                    <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
-                      alt="Action 3"
-                      className="action-icon"
+                  {showEmojiPicker[post._id] && (
+                  <div style={{ position: 'absolute', top: '100%', zIndex: 999 }}>
+                    <EmojiPicker
+                      onEmojiClick={(emojiObject) => handleEmojiClick(emojiObject, post._id)}
+                      height={350}
+                      width={300}
                     />
                   </div>
+                  )}
+                  <div className="comment-actions"
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                  >
+                      {/* { bad UI ya shawky => zero knowledge} */}
+
+                    <img
+                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-2.png"
+                      alt="Add Emoji for Input comment"
+                      className="action-icon"
+                      onClick={() =>
+                        setShowEmojiPicker((prev) => ({
+                          ...prev,
+                          [post._id]: !prev[post._id]
+                        }))
+                      }
+                    />
+
+                      
+
+
+                    {/* { bad UI ya shawky => zero knowledge} */}
+                    <img
+                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
+                      alt="Add Comment"
+                      className="action-icon"
+                      onClick={() => !isLoadingComment && handleAddComment(post._id, navigate)}
+                      
+                    />
+                  </div>
+
                 </div>
+              
               </div>
             ))
           ) : (

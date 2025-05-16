@@ -35,6 +35,7 @@ export const useLogin =  () => {
                 _id: json.userId,
                 email: json.identifier,
                 token: json.token,
+                username: json.username
             };
             
             // save the user to session storage in key value pairs
