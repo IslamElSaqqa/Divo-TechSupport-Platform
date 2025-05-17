@@ -54,6 +54,17 @@ export const communityReducer = (state, action) => {
                     : post
                 ),
             };
+        case 'GET_POST_COMMENTS':
+            return {
+                ...state,
+                posts: state.posts.map((post) =>
+                    post._id === action.payload.postId
+                        ? {
+                            ...post,
+                            comments: action.payload.comments,
+                        } : post
+                ),
+            };
 
         default:
             return state

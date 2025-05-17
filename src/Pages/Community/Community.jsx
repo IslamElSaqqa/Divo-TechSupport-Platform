@@ -9,8 +9,9 @@ import { useDeletePost } from '../../Hooks/Community/useDeletePost';
 import { useUpdatePost } from "../../Hooks/Community/useUpdatePost"
 import { useTogglePost } from '../../Hooks/Community/useTogglePost';
 import { useAddComment } from '../../Hooks/Community/useAddComment';
+import { useGetPostComments } from '../../Hooks/Community/useGetPostComments';
 
-import Picker from '@emoji-mart/react';
+import  Picker  from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { useClickOutside } from '../../Hooks/Community/useClickOutside'; 
 
@@ -36,11 +37,19 @@ const Community = () => {
   const [editingPostId, setEditingPostId] = useState(null);
   const [editedContent, setEditedContent] = useState('');
 
+  // showing fetched comments utils
+  const [activePostId, setActivePostId] = useState(null)
+  const [commentsByPost, setCommentsByPost] = useState({});
+  const [commentPageByPost, setCommentPageByPost] = useState({});
+  const [hasMoreCommentsByPost, setHasMoreCommentsByPost] = useState({}); 
+  const commentsRefs = useRef({});
+  const { getPostComments, errorComments } = useGetPostComments();
+
+
   // For Creating Post section with emoji picker!
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef(null);
   useClickOutside(emojiPickerRef, () => setShowEmojiPicker(false));
-
 
 
   // appending emojis to either the content or the updated content
@@ -52,21 +61,12 @@ const Community = () => {
     }
   };
 
-
-
-  const handleEmojiClick = (emojiObject, postId) => {
-  setCommentInputs((prevInputs) => ({
-    ...prevInputs,
-    [postId]: (prevInputs[postId] || "") + emojiObject.emoji
-  }));
-};
-
   useEffect(() => {
     fetchPosts(1); // Initial fetch on mount
   }, [user]);
   
 
-  // using another useEffect to handle scroll
+  // using another useEffect to handle scroll of getting posts
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -82,7 +82,6 @@ const Community = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [page, hasMore]);
   
-
 
   const fetchPosts = async (pageNum = 1) => {
     if (isFetchingRef.current || !hasMore) return;
@@ -228,6 +227,44 @@ const Community = () => {
     }
   };
 
+
+  const toggleComments = (postId) => {
+    if (activePostId === postId) {
+      setActivePostId(null); // Close if already open
+    } else {
+      setActivePostId(postId);
+      if (!commentsByPost[postId]) {
+        fetchCommentsForPost(postId, 1); // Fetch first page
+      }
+    }
+  };
+
+  // fetching post comments
+const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
+  try {
+    const { comments: newComments, hasMore } = await getPostComments(postId, page, limit);
+
+    setCommentsByPost((prev) => ({
+      ...prev,
+      [postId]: page === 1
+        ? newComments
+        : [...(prev[postId] || []), ...newComments],
+    }));
+
+    setCommentPageByPost((prev) => ({
+      ...prev,
+      [postId]: page,
+    }));
+
+    setHasMoreCommentsByPost((prev) => ({
+      ...prev,
+      [postId]: hasMore,
+    }));
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+  }
+};
+
   // handle Adding Comment
   const handleAddComment = async (postId, navigate) => {
 
@@ -245,7 +282,6 @@ const Community = () => {
   }
 };
 
-
 // Check whether user liked the post or not!
   const hasUserLiked = (post) => {
     return user && Array.isArray(post.likedBy) && post.likedBy.includes(user._id);
@@ -262,6 +298,7 @@ const Community = () => {
         {updateError && <div className="error">{updateError}</div>}
         {errorToggle && <div className='error'>{errorToggle}</div>}
         {errorAddingComment && <div className='error'>{ errorAddingComment}</div>}
+        {errorComments && <div className='error'>{ errorComments}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="create-post">
@@ -463,15 +500,21 @@ const Community = () => {
                       />
                       <span>{typeof post.likes === 'number' ? post.likes : 0} Likes</span>
                     </div>
-                    <div className="stat-item">
+
+                    {/* Comment toggle & comment list */}
+                  <div
+                      className="stat-item"
+                      onClick={() => toggleComments(post._id)}
+                    >
                       <img
                         src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/chat-dots.png"
                         alt="Comment"
                       />
-                      <span>{Array.isArray(post.comments) ? post.comments.length : 0} Comments</span>
-                    </div>
+                        <span>{Array.isArray(post.comments) ? post.comments.length : 0} Comments</span>
+                  </div>
                   </div>
                 </div>
+                    
 
                 <div className="post-comment">
                   <img
@@ -488,15 +531,7 @@ const Community = () => {
                       setCommentInputs({ ...commentInputs, [post._id]: e.target.value })
                     }
                   />
-                  {showEmojiPicker[post._id] && (
-                  <div style={{ position: 'absolute', top: '100%', zIndex: 999 }}>
-                    <EmojiPicker
-                      onEmojiClick={(emojiObject) => handleEmojiClick(emojiObject, post._id)}
-                      height={350}
-                      width={300}
-                    />
-                  </div>
-                  )}
+                
                   <div className="comment-actions"
                     style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                   >
@@ -506,17 +541,9 @@ const Community = () => {
                       src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-2.png"
                       alt="Add Emoji for Input comment"
                       className="action-icon"
-                      onClick={() =>
-                        setShowEmojiPicker((prev) => ({
-                          ...prev,
-                          [post._id]: !prev[post._id]
-                        }))
-                      }
                     />
 
                       
-
-
                     {/* { bad UI ya shawky => zero knowledge} */}
                     <img
                       src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
