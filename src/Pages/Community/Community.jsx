@@ -42,8 +42,23 @@ const Community = () => {
   const [commentsByPost, setCommentsByPost] = useState({});
   const [commentPageByPost, setCommentPageByPost] = useState({});
   const [hasMoreCommentsByPost, setHasMoreCommentsByPost] = useState({}); 
-  const commentsRefs = useRef({});
   const { getPostComments, errorComments } = useGetPostComments();
+
+    // Handle fetching & scroll-based pagination of comments per post
+  const observer = useRef({});
+  const lastCommentRef = (postId) => (node) => {
+    if (isFetchingRef.current || !hasMoreCommentsByPost[postId]) return;
+
+    if (observer.current[postId]) observer.current[postId].disconnect();
+
+    observer.current[postId] = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        fetchCommentsForPost(postId, (commentPageByPost[postId] || 1) + 1);
+      }
+    });
+
+    if (node) observer.current[postId].observe(node);
+  };
 
 
   // For Creating Post section with emoji picker!
@@ -139,9 +154,9 @@ const Community = () => {
 
     const success = await createPost(postData);
     if (success) {
-      setContent('');
-      setImageUpload('');
-      toast.success('Post created successfully!', {
+        setContent('');
+        setImageUpload('');
+        toast.success('Post created successfully!', {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
@@ -230,6 +245,7 @@ const Community = () => {
 
   const toggleComments = (postId) => {
     if (activePostId === postId) {
+      console.log(activePostId)
       setActivePostId(null); // Close if already open
     } else {
       setActivePostId(postId);
@@ -243,7 +259,7 @@ const Community = () => {
 const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
   try {
     const { comments: newComments, hasMore } = await getPostComments(postId, page, limit);
-
+    
     setCommentsByPost((prev) => ({
       ...prev,
       [postId]: page === 1
@@ -514,7 +530,46 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                   </div>
                   </div>
                 </div>
-                    
+
+                
+                  {/* Comment section */}
+                {activePostId === post._id && (
+                  <div className="comments-section">
+                    {(commentsByPost[post._id] || []).map((comment, idx, arr) => {
+                      const isLast = idx === arr.length - 1;
+                      return (
+                        <div
+                          className="Comment-group-box"
+                          key={comment._id || idx}
+                          ref={isLast ? lastCommentRef(post._id) : null}
+                        >
+                          <div className="Comment-group-box-image">
+                            <img
+                              src={
+                                // Use a default avatar as API doesn't return one
+                                "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"
+                              }
+                              alt="User avatar"
+                              className="avatar"
+                            />
+                          </div>
+                          <div className="Comment-group-box-content">
+                            <span className="Comment-group-box-content-username">
+                              {comment.username || 'Unknown'}
+                            </span>
+                            <div className="Comment-group-box-content-commented">
+                              {comment.content}
+                            </div>
+                          </div>
+                        </div>
+                    );
+                  })}
+
+                {!hasMoreCommentsByPost[post._id] && (
+                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'orange' }}>No more comments</p>
+                )}
+            </div>
+              )}
 
                 <div className="post-comment">
                   <img
@@ -566,5 +621,4 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
     </div>
   );
 };
-
 export default Community;

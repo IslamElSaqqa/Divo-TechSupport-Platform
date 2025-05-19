@@ -24,17 +24,20 @@ export const useGetPostComments =  () => {
             // check the response status
             if (!response.ok) {
                 setErrorGetComments(json.message || "Failed to fetch comments")
-                return false;
+                return { comments: [], hasMore: false };
             }
 
             if (response.ok) {
                 sessionStorage.setItem('Post_Comments', JSON.stringify(json.data))
                 dispatch({ type: 'GET_POST_COMMENTS',  payload: { postId, comments: json.data } })
-                return true;
-            }
+                return {
+                    comments: json.data || [],
+                    hasMore: json.data.length === limit
+                }
+}
         } catch (e) {
-            setErrorGetComments("Something went wrong", e.message);
-            return false;
+            setErrorGetComments("Something went wrong" + e.message);
+            return { comments: [], hasMore: false };
         } 
             
     }

@@ -4956,3 +4956,35 @@ img {
   border-radius: 8px;
   padding: 8px;
 }
+.Comment-panel{
+
+  border-top: 1px solid #cccccc71;
+}
+.Comment-group-box{
+  padding: 10px;
+  padding-left: 20px;
+  display: flex;
+ 
+}
+.Comment-group-box-image{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+}
+.Comment-group-box-content{
+  padding: 10px;
+  background-color: #cccccc32;
+  border-radius: 10px;
+
+}
+.Comment-group-box-content-username{
+  font-size: 14px;
+  font-weight: bold;
+  color: orange;
+}
+.Comment-group-box-content-commented{
+  font-size: 12px; 
+  color: #333;
+}
