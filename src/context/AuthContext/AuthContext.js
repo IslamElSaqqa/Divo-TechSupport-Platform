@@ -1,3 +1,4 @@
+
 import { createContext, useReducer, useEffect } from 'react'
 
 // Create an AuthContext instance from createContext
@@ -32,9 +33,7 @@ export const AuthContextProvider = ({ children }) => {
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem('user'))
         dispatch({type: 'LOGIN', payload: user})
-    }, [
-        dispatch
-    ])
+    }, [])
 
     return (
         // passing props to the provider to wrap 

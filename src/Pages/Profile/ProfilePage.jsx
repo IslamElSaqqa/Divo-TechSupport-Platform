@@ -189,10 +189,10 @@ const ProfilePage = () => {
             </div>
 
             <div className="form-actions">
-              <button type="button" className="cancel-btn" onClick={handleCancel}>
-                Cancel
+              <button type="button" className="cancel-btnn" onClick={handleCancel}>
+                Reset Changes
               </button>
-                <button disabled={ updateLoading } type="submit" className="save-btn">
+                <button disabled={ updateLoading } type="submit" className="save-btnn">
                   { updateLoading ? "updating...." : "Save Changes" }
               </button>
             </div>

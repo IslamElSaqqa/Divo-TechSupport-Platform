@@ -1,153 +1,205 @@
-import React, { useState } from 'react';
 
-
-const ProfileSidebar = () => {
-  return (
-
-    <div className="profile-sidebar">
-      <h2 className="sidebar-title">Manage My Account</h2>
-      <div className="sidebar-section">
-        <span className="sidebar-link active">My Profile</span>
-        <span className="sidebar-link">My Payment Options</span>
-      </div>
-      <div className="sidebar-section">
-        <span className="sidebar-link">My Orders</span>
-      </div>
-      <div className="sidebar-section">
-        <span className="sidebar-link">My Cancellations</span>
-      </div>
-    </div>
-  );
-};
-
-const ProfileForm = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    address: '',
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-  };
-
-  const handleCancel = () => {
-    console.log('Form cancelled');
-  };
-
-  return (
-    <div className="profile-form">
-      <div className="profile-header">
-        <h2 className="profile-title">Edit Your Profile</h2>
-        <span className="welcome-text">Welcome! {formData.firstName} {formData.lastName}</span>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label>First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label>Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label>Address</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="password-section">
-          <h3>Password Changes</h3>
-          <div className="form-group">
-            <input
-              type="password"
-              name="currentPassword"
-              placeholder="Current Password"
-              value={formData.currentPassword}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              name="newPassword"
-              placeholder="New Password"
-              value={formData.newPassword}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm New Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div className="form-actions">
-          <button type="button" className="cancel-btn" onClick={handleCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="save-btn">
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-};
+import React, { useState, useEffect } from 'react';
+import { useGetProfile } from '../../Hooks/usegetProfile';
+import { useAuthContext } from '../../Hooks/useAuthContext';
+import { useUpdateProfile } from '../../Hooks/useUpdateProfile';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProfilePage = () => {
+  const [username, setUsername] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [initialData, setInitialData] = useState(null);
+  const { user } = useAuthContext();  
+  const { isLoading, error, getProfile } = useGetProfile(); 
+  const { updateLoading, UpdateError, updateProfile } = useUpdateProfile()
+
+  // Flag to ensure the profile fetch happens only once
+  const [profileFetched, setProfileFetched] = useState(false);
+
+  useEffect(() => {
+    if (!user?.token || !user?._id || profileFetched) {
+      // If no user token or userId or already fetched, skip fetching
+      return;
+    }
+
+    // fetch profile data
+    const fetchProfile = async () => {
+      
+      const profile = await getProfile(); 
+      
+      if (profile) {
+        
+        setUsername(profile.username || '');
+        setEmail(profile.email || '');
+        setPhone(profile.phone_number || '');
+        setInitialData({
+          username: profile.username || '',
+          email: profile.email || '',
+          phone: profile.phone_number || '',
+        });
+        setProfileFetched(true);  // Mark as fetched
+      }
+    };
+
+    fetchProfile(); // Fetch the profile only once
+  }, [user, profileFetched, getProfile]); 
+
+  const handleCancel = () => {
+    if (initialData) {
+      setUsername(initialData.username);
+      setEmail(initialData.email);
+      setPhone(initialData.phone);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    }
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+  let updatedFields = {
+    ...(username !== initialData.username && { username }),
+    ...(phone !== initialData.phone && { phone_number: phone }),
+    ...(email !== initialData.email && { email }),
+    ...(currentPassword && newPassword && {
+      currentPassword,
+      newPassword,
+      confirmPassword: confirmNewPassword
+    })
+  };
+
+  // Always include email so backend can identify user even if unchanged
+  updatedFields = { email, ...updatedFields };
+
+  if (Object.keys(updatedFields).length === 1) {
+    toast.warn("No changes detected.");
+    return;
+  }
+
+  const result = await updateProfile(updatedFields);
+
+    if (result) {
+      toast.success('profile updated successfully!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          });
+                  // Redirect after a short delay
+      
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setInitialData({
+        username: result.username || '',
+        email: result.email || '',
+        phone: result.phone_number || ''
+      });
+    }
+  };
+
   return (
     <div className="content-container">
-      <ProfileSidebar />
-      <ProfileForm />
+                <ToastContainer />
+      <div className="profile-sidebar">
+        <h2 className="sidebar-title">Manage My Account</h2>
+        <div className="sidebar-section">
+          <span className="sidebar-link active">My Profile</span>
+        </div>
+      </div>
 
+      <div className="profile-form">
+        <div className="profile-header">
+        {error && <div className="error">{error}</div>}
+          <h2 className="profile-title">Edit Your Profile</h2>
+          <span className="welcome-text">Welcome!  {<span className='ProfileUsername'>{ username }</span>}</span>
+        </div>
+
+        {isLoading ? (
+          // <p>Loading profile...</p>
+          <div className="spinner-container">
+                        <div className="spinner"></div>
+                    </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Username</label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+        {UpdateError && <div className='error'>{ UpdateError}</div>}
+
+            <div className="password-section">
+              <h3>Password Changes</h3>
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Current Password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="Confirm New Password"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button type="button" className="cancel-btn" onClick={handleCancel}>
+                Cancel
+              </button>
+                <button disabled={ updateLoading } type="submit" className="save-btn">
+                  { updateLoading ? "updating...." : "Save Changes" }
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 };

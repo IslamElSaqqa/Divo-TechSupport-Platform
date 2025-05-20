@@ -28,7 +28,7 @@ const WindowsErrors2 = () => {
 
         <div className="reactivation-container">
           <h1 className="title-error">
-            " <span className="orange-text">{error_code} </span>" Error{" "}
+            " <span className="orange-text">{error_code}</span>" Error{" "}
           </h1>
           <h1 className="solution-title">Error Description: </h1>
           <p className="text-error"> {description} </p>

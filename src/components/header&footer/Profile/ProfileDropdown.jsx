@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ProfileDropdown.css';
 import { useLogout } from '../../../Hooks/useLogout';
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 import { useAuthContext } from '../../../Hooks/useAuthContext';
 
 function ProfileDropdown() {
@@ -19,6 +19,7 @@ function ProfileDropdown() {
         setIsOpen(false);
       }
     };
+    
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -44,6 +45,9 @@ function ProfileDropdown() {
   const handleLogin = () => { 
     navigate('/login')
   }
+  const handleProfile =() =>{
+    navigate("/profile-page");
+  }
 
   return (
     <div className="dropdown-container" ref={dropdownRef}>
@@ -55,13 +59,18 @@ function ProfileDropdown() {
   <div className="dropdown-menu">
     {user ? (
       <>
-        <Link to="/profile-page" className="menu-item">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+
+        <button className="menu-item" onClick={handleProfile} >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
               fill="currentColor" className="menu-icon">
               <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
           </svg>
-          Manage My Account
-        </Link>
+          
+          <span className="logout-keyword">Manage My Account</span>
+
+        </button>
+
+
 
         <button className="menu-item" onClick={handleClick}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -97,7 +106,7 @@ function ProfileDropdown() {
               <line x1="20" y1="8" x2="20" y2="14" />
               <line x1="23" y1="11" x2="17" y2="11" />
             </svg>
-          <span className="logout-keyword">Sign up</span>
+          <span className="logout-keyword">Sign Up</span>
         </button>
       </>
     )}
