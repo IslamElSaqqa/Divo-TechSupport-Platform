@@ -5108,3 +5108,14 @@ img {
 .home-button-404:hover {
   background-color: #e08915;
 }
+.specialist-form-header{
+  margin-bottom: 10%;
+}
+.specialist-form-header h1 {
+  color: #FF9500
+}
+.tech-logout{
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 18px;
+}

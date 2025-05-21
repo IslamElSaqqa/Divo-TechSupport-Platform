@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { useGetTechnicianContext } from '../../Hooks/Technician/useGetTechnician';
-import { useTechnicianContext } from '../../Hooks/Technician/useTechnicianContext';
 function Tech() {
-  const { technician } = useTechnicianContext()
-  const { isLoading, error, GetTechnicianById } = useGetTechnicianContext();
-
-    useEffect(() => {
-        GetTechnicianById();
-    }, []);
-  
+  const technician = ''
   const techName = technician?.name || 'Loading...';
   const techSpecialization = technician?.specialization || 'Loading...';
   const techEmail = technician?.email || 'Loading...';

@@ -23,6 +23,8 @@ import ContactUs from "../components/header&footer/Footer Links/ContactUs";
 import PrivacyPolicy from "../components/header&footer/Footer Links/PrivacyPolicy";
 import AboutUs from "../Pages/About Us/AboutUs";
 import Error404 from "../Pages/Error404";
+import Tech from "../Pages/Techinician/tech";
+import TechnicianLogin from "../Pages/AuthenticationPages/Technician/TechnicianLogin";
 
 
 // Helper for routes with header and footer
@@ -58,6 +60,10 @@ const AppRoutes = () => {
             <Route path="/contact-us" element={<RouteWithHeaderFooter element={<ContactUs/>}/>}/> 
             <Route path="/privacy-policy" element={<RouteWithHeaderFooter element={<PrivacyPolicy/>}/>}/> 
             <Route path="/about-us" element={<RouteWithHeaderFooter element={<AboutUs/>}/>}/> 
+            <Route path="/tech" element={<RouteWithHeaderFooter element={<Tech/>}/>}/> 
+            <Route path="/technician-login" element={<RouteWithHeaderFooter element={<TechnicianLogin/>}/>}/> 
+
+
             <Route path="*" element={<RouteWithHeaderFooter element={<Error404 />} />} />
 
 
