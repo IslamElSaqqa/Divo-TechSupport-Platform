@@ -61,7 +61,7 @@ const FooterQuickLinkSection = () => {
     <div className="footer-quick-link-section">
       <h2 className="quick-link-title">Quick Link</h2>
       <div className="quick-link-items">
-        <a href="/tech" className="quick-link-item">
+        <a href="/privacy-policy" className="quick-link-item">
           Privacy Policy
         </a>
         <a href="/contact-us" className="quick-link-item">

@@ -366,7 +366,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                 >
                   <img
                     src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/image.png"
-                    alt="Image"
+                    alt="Image2"
                   />
                 </button>
                 <input
@@ -590,16 +590,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                   <div className="comment-actions"
                     style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                   >
-                      {/* { bad UI ya shawky => zero knowledge} */}
-
-                    <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-2.png"
-                      alt="Add Emoji for Input comment"
-                      className="action-icon"
-                    />
-
-                      
-                    {/* { bad UI ya shawky => zero knowledge} */}
+                  
                     <img
                       src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
                       alt="Add Comment"

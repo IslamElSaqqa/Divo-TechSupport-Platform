@@ -20,7 +20,11 @@ import OnlineServicing from "../Pages/OnlineServicing/OnlineServicing"
 import RequestSuccess from "../Pages/OnlineServicing/RequestSuccess";
 import ProfilePage from "../Pages/Profile/ProfilePage";
 import ContactUs from "../components/header&footer/Footer Links/ContactUs";
-import AboutUs from "../components/header&footer/Footer Links/AboutUs";
+import PrivacyPolicy from "../components/header&footer/Footer Links/PrivacyPolicy";
+import AboutUs from "../Pages/About Us/AboutUs";
+import Error404 from "../Pages/Error404";
+
+
 // Helper for routes with header and footer
 const RouteWithHeaderFooter = ({ element }) => (
     <>
@@ -52,7 +56,10 @@ const AppRoutes = () => {
             <Route path="/online-servicing/request-success" element={<RouteWithHeaderFooter element={<RequestSuccess />}/>}/>
             <Route path="/profile-page" element={<RouteWithHeaderFooter element={<ProfilePage />}/>}/> 
             <Route path="/contact-us" element={<RouteWithHeaderFooter element={<ContactUs/>}/>}/> 
+            <Route path="/privacy-policy" element={<RouteWithHeaderFooter element={<PrivacyPolicy/>}/>}/> 
             <Route path="/about-us" element={<RouteWithHeaderFooter element={<AboutUs/>}/>}/> 
+            <Route path="*" element={<RouteWithHeaderFooter element={<Error404 />} />} />
+
 
         </Routes>
     );
