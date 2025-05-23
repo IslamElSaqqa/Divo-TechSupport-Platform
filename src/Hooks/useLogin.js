@@ -35,17 +35,20 @@ export const useLogin =  () => {
                 _id: json.userId,
                 email: json.identifier,
                 token: json.token,
-                username: json.username
+                username: json.username,
+                user_presence: json.user_presence
             };
             
             // save the user to session storage in key value pairs
             sessionStorage.setItem('user', JSON.stringify(normalizedUser));
-            // update auth context using dispatch from useReducer 
-            // (Type: '', payload: '')
-            dispatch({ type: 'LOGIN', payload: normalizedUser })
-            return true;
+
+            dispatch({
+                type: 'LOGIN',
+                payload: normalizedUser
+            })
+                return { success: true, user_presence: json.user_presence }
+
         }
-            
     }
     return {isLoading, error, login}
 }

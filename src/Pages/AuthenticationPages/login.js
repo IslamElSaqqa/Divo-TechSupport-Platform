@@ -1,8 +1,9 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useLogin } from '../../Hooks/useLogin';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuthContext } from "../../Hooks/useAuthContext"
 
 const Login = () => {
 
@@ -36,26 +37,48 @@ const Login = () => {
     
         // HandleSubmit
         const handleSubmit = async (e) => {
-            e.preventDefault()
-            // console.log(inputValue, password)
-            const successLogin = await login(inputValue, password)
+        e.preventDefault();
 
-            // Implementing toast container for successfull snackbar status
-            if (successLogin) {
-                toast.success('Logged In successfully!', {
-                        position: 'top-right',
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                });
-                    // Redirect after a short delay
-                setTimeout(() => {
-                        navigate('/home');
-                    }, 3100);
-            }
-        };
+        const result = await login(inputValue, password);
+
+        if (result && result.success) {
+        toast.success(`Logged in successfully! Welcome ${inputValue}`, {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+        });
+
+        setTimeout(() => {
+            result.user_presence === 1 ? navigate('/Dashboard') : navigate('/home');
+            }, 2100);
+        }
+    };
+    const { user } = useAuthContext()
+
+    // prevent repetitive login when user is already logged in!
+    useEffect(() => {
+    if (user?.token) {
+        try {
+        const base64Url = user.token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const decodedPayload = JSON.parse(window.atob(base64));
+        const userPresence = decodedPayload.user_presence;
+
+        if (userPresence === 1) {
+            navigate('/Dashboard');
+        } else {
+            navigate('/home');
+        }
+        } catch (err) {
+        console.error('Error decoding token', err);
+        sessionStorage.removeItem('user'); // Fallback: remove malformed token
+        }
+    }
+    }, [user, navigate]);
+
     return (
         <div className="content-container">
             <ToastContainer />
