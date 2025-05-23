@@ -23,8 +23,14 @@ import ContactUs from "../components/header&footer/Footer Links/ContactUs";
 import PrivacyPolicy from "../components/header&footer/Footer Links/PrivacyPolicy";
 import AboutUs from "../Pages/About Us/AboutUs";
 import Error404 from "../Pages/Error404";
-import Tech from "../Pages/Techinician/tech";
+// import Tech from "../Pages/Techinician/tech";
 import TechnicianLogin from "../Pages/AuthenticationPages/Technician/TechnicianLogin";
+import ServicesRequests from '../components/AdminDashboard/ServiceRequests/ServicesRequests';
+import Accounting from '../components/AdminDashboard/Accounting/Accounting';
+import Users from '../components/AdminDashboard/Users/Users'; 
+import AdminRepairShops from '../components/AdminDashboard/RepairShops/RepairShops';
+import WinErrors from '../components/AdminDashboard/WinErrors/WinErrors';
+import DashboardLayout from '../components/AdminDashboard/DashBoard/DashboardLayout';
 
 
 // Helper for routes with header and footer
@@ -60,9 +66,14 @@ const AppRoutes = () => {
             <Route path="/contact-us" element={<RouteWithHeaderFooter element={<ContactUs/>}/>}/> 
             <Route path="/privacy-policy" element={<RouteWithHeaderFooter element={<PrivacyPolicy/>}/>}/> 
             <Route path="/about-us" element={<RouteWithHeaderFooter element={<AboutUs/>}/>}/> 
-            <Route path="/tech" element={<RouteWithHeaderFooter element={<Tech/>}/>}/> 
-            <Route path="/technician-login" element={<RouteWithHeaderFooter element={<TechnicianLogin/>}/>}/> 
-
+            {/* <Route path="/tech" element={<RouteWithHeaderFooter element={<Tech/>}/>}/>  */}
+            <Route path="/technician-login" element={<RouteWithHeaderFooter element={<TechnicianLogin/>}/>}/>
+            <Route path="/servicing" element={<ServicesRequests />} />
+            <Route path="/accounting" element={<Accounting />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/admin-repairshops" element={<AdminRepairShops />} />
+            <Route path="/winerrors" element={<WinErrors />} />
+            <Route path="/dashboard" element={<DashboardLayout />} />
 
             <Route path="*" element={<RouteWithHeaderFooter element={<Error404 />} />} />
 

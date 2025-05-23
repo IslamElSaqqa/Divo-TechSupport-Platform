@@ -1,0 +1,290 @@
+.container {
+  width: 97%;
+  min-width: 1000px;
+  padding: 42px 46px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 49px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 24px;
+  color: #000000;
+  margin: 0;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.profileImg {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+}
+
+.profileName {
+  font-family: 'Neue Montreal', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #343a40;
+  line-height: 24px;
+}
+
+.chevron {
+  width: 24px;
+  height: 24px;
+}
+
+.controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  width: 117px;
+  height: 48px;
+  background: #ffffff;
+  border: 0.5px solid #cbcbcb;
+  border-radius: 10px;
+  padding: 0 11px;
+}
+
+.selectText {
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.33);
+}
+
+.divider {
+  width: 1px;
+  height: 31px;
+  background: #cbcbcb;
+  margin: 0 8px;
+}
+
+.selectIcon {
+  width: 12px;
+  height: 5.69px;
+}
+
+.searchInput {
+  width: 260px;
+  height: 48px;
+  background: #ffffff;
+  border: 0.5px solid #cbcbcb;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.33);
+}
+
+.downloadBtn, .deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  background: #ffffff;
+  border: 0.5px solid #cbcbcb;
+  border-radius: 10px;
+  padding: 0 16px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.downloadBtn {
+  width: 140px;
+  transition: 0.3s ease;
+}
+
+.downloadBtn:hover
+{
+  background: #ffb030;
+  opacity: 0.8;
+}
+
+.deleteBtn {
+  width: 110px;
+  color: #e73535;
+}
+
+.tableWrapper {
+  margin-bottom: 32px;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  text-align: center;
+}
+
+.table th {
+  height: 45px;
+  background: #ffae35;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.table td {
+  height: 59px;
+  padding: 0 20px;
+  font-weight: 500;
+  font-size: 18px;
+  border-bottom: 0.5px solid #cbcbcb;
+  background: #ffffff;
+  color: #000000;
+}
+
+.checkboxCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkboxCell input[type="checkbox"] {
+  width: 21px;
+  height: 21px;
+  border: 1px solid #ababab;
+  border-radius: 3px;
+  background: #d9d9d9;
+}
+
+.techId {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 175%;
+}
+
+.editIcon {
+  width: 20.12px;
+  height: 19.08px;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 23px;
+}
+
+.paginationBtn {
+  width: 116px;
+  height: 48px;
+  background: #ffffff;
+  border: 0.5px solid #cbcbcb;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.paginationBtn:disabled {
+  color: #ababab;
+  cursor: not-allowed;
+}
+
+.pageNumbers {
+  display: flex;
+  gap: 13px;
+  font-weight: 500;
+  font-size: 16px;
+  align-items: center;
+}
+
+.pageNumbers span {
+  cursor: pointer;
+}
+
+.pageNumbers span.active {
+  font-weight: 600;
+}
+
+.pageSelect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 42px;
+  height: 27px;
+  background: #ffffff;
+  border: 0.5px solid #cbcbcb;
+  border-radius: 5px;
+  padding: 0 9px;
+  cursor: pointer;
+}
+
+.pageSelectIcon {
+  width: 10px;
+  height: 4.41px;
+}
+
+@media (max-width: 1200px) {
+  .container {
+    min-width: auto;
+    padding: 20px;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+
+  .searchInput {
+    width: 100%;
+    flex: 1;
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .selectWrapper,
+  .downloadBtn,
+  .deleteBtn {
+    width: 100%;
+  }
+
+  .pageNumbers {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,6 +1,4 @@
-
 import { createContext, useReducer } from 'react'
-
 export const CommunityContext = createContext()
 export const communityReducer = (state, action) => {
     switch (action.type) {
