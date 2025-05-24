@@ -161,7 +161,7 @@ const AppRoutes = () => {
         <Route path="/technician-login" element={<RouteWithHeaderFooter element={<TechnicianLogin />} />} />
 
         {/* Admin-Only Protected Routes */}
-        <Route path="/dashboard" element={
+        <Route path="/Dashboard" element={
             <ProtectedRoute requiredAdmin={true}>
             <DashboardLayout />
             </ProtectedRoute>

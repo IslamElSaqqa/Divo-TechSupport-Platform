@@ -41,20 +41,24 @@ const Login = () => {
 
         const result = await login(inputValue, password);
 
-        if (result && result.success) {
-        toast.success(`Logged in successfully! Welcome ${inputValue}`, {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-        });
+            if (result) {
+                toast.success(`Logged in successfully!\nWelcome ${inputValue}`, {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    
+                });
 
-        setTimeout(() => {
-            result.user_presence === 1 ? navigate('/Dashboard') : navigate('/home');
-            }, 2100);
-        }
+                result.user_presence === 1 ? setTimeout(() => { 
+                    navigate('/Dashboard')
+                }, 3200) : setTimeout(() => { 
+                    navigate('/home')
+                }, 3200) 
+                
+            }   
     };
     const { user } = useAuthContext()
 
@@ -74,7 +78,7 @@ const Login = () => {
         }
         } catch (err) {
         console.error('Error decoding token', err);
-        sessionStorage.removeItem('user'); // Fallback: remove malformed token
+        sessionStorage.removeItem('user');
         }
     }
     }, [user, navigate]);

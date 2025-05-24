@@ -46,7 +46,8 @@ export const useLogin =  () => {
                 type: 'LOGIN',
                 payload: normalizedUser
             })
-                return { success: true, user_presence: json.user_presence }
+                setIsLoading(false);
+                return true
 
         }
     }
