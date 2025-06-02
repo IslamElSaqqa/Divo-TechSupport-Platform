@@ -1,0 +1,17 @@
+// cloud name = dr9yx1tod
+// API_KEY = 812815153437913
+// API_SECRET = rlC1zj9EgZgy0XoRHt2s51zotSY
+
+//Firebase store steps
+1.Check if user exists in MongoDB.
+2.Generate a 6-digit OTP.
+3.Save OTP in Firebase Firestore with an expiry timestamp.
+4.Send OTP to email using Nodemailer.
+
+// reset password steps
+1.Check Firestore for matching OTP and expiration.
+2.If valid, hash and update password in MongoDB.
+3.Delete OTP from Firestore.
+
+
+  

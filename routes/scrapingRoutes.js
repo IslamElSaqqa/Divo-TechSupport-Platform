@@ -1,0 +1,16 @@
+const express = require("express")
+const router = express.Router()
+const scrapeAmazon = require('../ScrapingServices/Amazon')
+const scrapeJumia = require('../ScrapingServices/Jumia')
+const scrapeSkikoStore = require('../ScrapingServices/ShikoStore')
+const scrapeCairoSales = require('../ScrapingServices/cairoSales')
+const scrapeMaxHardware = require('../ScrapingServices/MaxHardware')
+const scrapeAll = require('../controllers/scrapeAllServices')
+router.get('/amazon', scrapeAmazon)
+router.get('/jumia', scrapeJumia)
+router.get('/shiko', scrapeSkikoStore)
+router.get('/cairoSales', scrapeCairoSales)
+router.get('/maxHardware', scrapeMaxHardware)
+router.get('/scrapeAll', scrapeAll)
+
+module.exports =  router 
