@@ -1,0 +1,15 @@
+.innerDivArea
+{
+    vertical-align: middle; 
+    width: 1200px;
+    min-width: 1200px;
+    margin: auto;
+    line-height: normal;
+    max-width: 1000px;
+    max-height: 1080px;
+  }
+  
+.App 
+{
+  text-align: center;
+}
