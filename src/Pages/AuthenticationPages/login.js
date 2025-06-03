@@ -138,10 +138,10 @@ const Login = () => {
             
             <NavLink to ={"/trouble-login"} className="forgot-password"> Forget Password? </NavLink>
 
-            <button type="button" className="google-signup-btn">
+            {/* <button type="button" className="google-signup-btn">
                 <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886332/aowvjiwbegdopkcga4vu.png" alt="Google" />
                 <span>Sign up with Google</span>
-            </button>
+            </button> */}
 
             <div className="signup-prompt">
             <span>Don't have an account?</span>

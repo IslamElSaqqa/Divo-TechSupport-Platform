@@ -3273,7 +3273,10 @@ textarea:focus {
   .save-btnn:hover {
     background: #e68600;
   }
-  
+
+
+
+
   .cancel-btn:hover {
     color: #666;
   }
@@ -3683,6 +3686,7 @@ body {
   font-size: 14px;
   color: #20293a;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .stat-item img {
@@ -4900,12 +4904,21 @@ img {
   cursor: pointer;
   transition: opacity 0.2s;
   border-radius: 50px;
-  margin-top: 8px;
+
 }
 .icon-community:hover{
   
   background-color:orange;
 }
+.icon-community-profile{
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border-radius: 50px;
+
+}
+
 
 .edit-textarea {
   width: 100%;
@@ -4950,6 +4963,19 @@ img {
 .save-btn:hover {
  background-color: #F57C00
 }
+
+.cancel-btn-community {
+  background-color: transparent;
+  color: #dc3545; /* Red */
+  border: 1px solid #dc3545;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
 
 
 

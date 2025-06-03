@@ -53,7 +53,7 @@ function ProfileDropdown() {
         <img
           src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
           alt=""
-          className="icon-community"
+          className="icon-community-profile"
         />
       </div>
 

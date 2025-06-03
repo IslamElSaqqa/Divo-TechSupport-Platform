@@ -475,7 +475,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                         onClick={() => handleUpdate(post._id)} className="save-btn">
                           Save
                       </button>
-                    <button onClick={() => setEditingPostId(null)} className="cancel-btn">
+                    <button onClick={() => setEditingPostId(null)} className="cancel-btn-community">
                       Cancel
                     </button>
                   </>

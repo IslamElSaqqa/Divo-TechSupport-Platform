@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 
+
 const Sidebar = ({ className = "" }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -108,6 +109,29 @@ const Sidebar = ({ className = "" }) => {
                 className={styles.icon}
               />
               <span>Win errors</span>
+            </div>
+            <div
+              className={`${styles.navItem} ${
+                location.pathname === "/home" ? styles.active : ""
+              }`}
+              onClick={() => handleNavigation("/home")}
+            >
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className={styles.icon}
+                >
+                  <path d="M16 17v-3H9v-4h7V7l5 5-5 5z" />
+                  <path
+                    d="M14 7v2H5v6h9v2l5-5-5-5z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="0"
+                  />
+                  <path d="M12 3c-4.418 0-8 3.582-8 8v7c0 1.657 1.343 3 3 3h5c1.657 0 3-1.343 3-3v-7h-2" />
+                </svg>
+              <span>Go to Home</span>
             </div>
           </div>
         </div>
