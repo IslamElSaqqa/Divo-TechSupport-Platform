@@ -23,7 +23,13 @@ const HelpDesk = () => {
         </div>
 
         <div className="helpdesk-image-container">
-          <div className="helpdesk-image-circle"></div>
+          <div className="helpdesk-image-circle">
+            <img
+              src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886577/p7mn9byalpc5ze8zh4rh.png"
+              alt="Repair Service"
+              className="helpdesk-image"
+            />
+          </div>
         </div>
       </div>
     </div>

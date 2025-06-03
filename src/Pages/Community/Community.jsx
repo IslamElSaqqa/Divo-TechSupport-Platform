@@ -321,7 +321,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
             <div className="top">
               <div className="user-text">
                 <img
-                  src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar.png"
+                  src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
                   alt="Avatar"
                   className="avatar"
                 />
@@ -365,7 +365,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                   }}
                 >
                   <img
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/image.png"
+                    src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905224/gplrj3upc1lx6aogxner.png"
                     alt="Image2"
                   />
                 </button>
@@ -385,7 +385,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                     onClick={() => setShowEmojiPicker((prev) => !prev)}
                   >
                     <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/emoji.png"
+                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905258/vz5fwaf6knje5df4d2ib.png"
                       alt="Emoji"
                     />
                   </button>
@@ -426,7 +426,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                     <img
                       src={
                         post.user.avatar ||
-                        "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"
+                        "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
                       }
                       alt="User avatar"
                       className="avatar"
@@ -501,10 +501,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                         cursor: isLoadingToggle ? 'not-allowed' : 'pointer',
 
                       }}>
-                      <img
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/thumbs-up.png"
-                        alt="Like"
-                      />
+                
                       <img
                         src={
                           hasUserLiked(post)
@@ -523,7 +520,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                       onClick={() => toggleComments(post._id)}
                     >
                       <img
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/chat-dots.png"
+                        src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748904625/lsoturowkhlj0ulbyyp5.png"
                         alt="Comment"
                       />
                         <span>{Array.isArray(post.comments) ? post.comments.length : 0} Comments</span>
@@ -547,7 +544,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                             <img
                               src={
                                 // Use a default avatar as API doesn't return one
-                                "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"
+                                "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
                               }
                               alt="User avatar"
                               className="avatar"
@@ -573,7 +570,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
 
                 <div className="post-comment">
                   <img
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-3.png"
+                    src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
                     alt="User avatar"
                     className="avatar"
                   />
@@ -592,7 +589,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                   >
                   
                     <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
+                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748904661/cajeeyxeouzxomualfp7.png"
                       alt="Add Comment"
                       className="action-icon"
                       onClick={() => !isLoadingComment && handleAddComment(post._id, navigate)}

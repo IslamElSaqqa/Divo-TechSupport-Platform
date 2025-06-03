@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Header.module.css';
 
-const Header = ({ userName = "Derek Alvarado", userImage = "https://dashboard.codeparrot.ai/api/image/Z9NwpippvFKitUFI/rectangl.png" }) => {
+const Header = ({ userName = "Ahmed Shawky", userImage = "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905719/ensi2zlpwkwbs6m3kjlx.png" }) => {
   return (
     <header className={styles.header}>
       <div className={styles.profile}>
@@ -12,7 +12,7 @@ const Header = ({ userName = "Derek Alvarado", userImage = "https://dashboard.co
         />
         <span className={styles.userName}>{userName}</span>
         <img 
-          src="https://dashboard.codeparrot.ai/api/image/Z9NwpippvFKitUFI/chevron.png" 
+          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905779/vjaaueyy3fl0oukovxki.png" 
           alt="Chevron Down" 
           className={styles.chevron}
         />

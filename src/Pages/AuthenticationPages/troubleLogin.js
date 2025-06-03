@@ -57,7 +57,7 @@ const TroubleLogin = () => {
             <ToastContainer />
         <div className="side-image">
         <img 
-            src="https://dashboard.codeparrot.ai/api/image/Z8dpFdMaYryy9hsO/frame-93.png" 
+            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886577/p7mn9byalpc5ze8zh4rh.png" 
             alt="Repair Service" 
             className="repair-image"
                 />
@@ -65,7 +65,7 @@ const TroubleLogin = () => {
         
         <div className="content-wrapper">
             <div className="icon-section">
-                <img src="https://dashboard.codeparrot.ai/api/image/Z8YysMhTinWyM7HO/group.png" alt="Lock Icon" className="lock-icon" />
+                <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886660/fef7dngw1gzu0ht90end.png" alt="Lock Icon" className="lock-icon" />
             </div>
             <div className="header-section">
                 <h1>Trouble Logging in?</h1>
@@ -86,7 +86,7 @@ const TroubleLogin = () => {
                             value={email}
                             onChange={(e)=> setEmail(e.target.value)}
                         />
-                        <img src="https://dashboard.codeparrot.ai/api/image/Z8YysMhTinWyM7HO/envelope.png" alt="Email" className="email-icon" />
+                        <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748900923/lglduo5e2uijrtd3fntj.png" alt="Email" className="email-icon" />
                     </div>
                 </div>
                     <button disabled={isLoading} className="verify-button">

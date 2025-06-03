@@ -64,7 +64,7 @@ const ForgetPass = () => {
         <div className="content-container">
             <div className="side-image">
             <img 
-                src="https://dashboard.codeparrot.ai/api/image/Z8dpFdMaYryy9hsO/frame-93.png" 
+                src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886577/p7mn9byalpc5ze8zh4rh.png" 
                 alt="Repair Service" 
                 className="repair-image"
                 />     
@@ -73,7 +73,7 @@ const ForgetPass = () => {
                 <ToastContainer/>
                     <div className="verification-section">
                     <img 
-                        src="https://dashboard.codeparrot.ai/api/image/Z8dpFdMaYryy9hsO/group.png" 
+                        src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748900962/yal7ljeoyp3gokx1d3uo.png" 
                         alt="Verification" 
                         className="verification-image"
                         />

@@ -27,7 +27,7 @@ const Newpassword = () => {
     <div className="content-container">
         <div className="side-image">
         <img 
-            src="https://dashboard.codeparrot.ai/api/image/Z8dpFdMaYryy9hsO/frame-93.png" 
+            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886577/p7mn9byalpc5ze8zh4rh.png" 
             alt="Repair Service" 
             className="repair-image"
         />
@@ -35,7 +35,7 @@ const Newpassword = () => {
         
         <div className="content-wrapper">
         <div className="icon-section">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z8igv6wi-41-yX4Q/group.png" alt="Lock Icon" className="lock-icon" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748901081/oynyxlod89ejjqblklhu.png" alt="Lock Icon" className="lock-icon" />
         </div>
         <form onSubmit={handleSubmit}>
             <div className="header-section">
@@ -52,7 +52,7 @@ const Newpassword = () => {
                 value={newPassword}
                 onChange={(e)=> setNewPassword(e.target.value)}
                 />
-                <img src="https://dashboard.codeparrot.ai/api/image/Z8il37wkNXOiaV8r/envelope.png" alt="password" className="email-icon" />
+                <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748901126/g5izwq10biktbpxra4ze.png" alt="password" className="email-icon" />
             </div>
             <div className="input-wrapper">
                 <input
@@ -61,7 +61,7 @@ const Newpassword = () => {
                 value={confPassword}
                 onChange={(e)=> setConfPassword(e.target.value)}
                 />
-                <img src="https://dashboard.codeparrot.ai/api/image/Z8il37wkNXOiaV8r/envelope.png" alt="password" className="email-icon" />
+                <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748901126/g5izwq10biktbpxra4ze.png" alt="password" className="email-icon" />
             </div>
             
             </div>

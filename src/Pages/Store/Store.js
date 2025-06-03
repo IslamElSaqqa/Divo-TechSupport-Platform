@@ -53,20 +53,20 @@ const Store = () => {
   };
 
   const categories = [
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/image.png", name: "CPU" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse.png", name: "GPU" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-2.png", name: "PC Tower" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/monitor.png", name: "Monitor" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/cooler-1.png", name: "Cooler" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/mouse-1.png", name: "Mouse" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-4.png", name: "ROM" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/laptop-r.png", name: "Laptop" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/ellipse-5.png", name: "RAM" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/computer.png", name: "PC" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/usb-2.png", name: "Cables" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/security.png", name: "Camera" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/computer-2.png", name: "Speaker" },
-    { icon: "https://dashboard.codeparrot.ai/api/image/Z9ILnCppvFKitUBT/usb-1.png", name: "Network devices" }
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902662/g3a9iecy85qpkbi3pphi.png", name: "CPU" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902699/jvuxoeudvgzixfhunb73.png", name: "GPU" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902803/ucz5kotrtadauqojunyv.png", name: "PC Tower" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902825/c3vetqefgytqgeqhxqup.png", name: "Monitor" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902844/h3icic9q5bshjtt1it1x.png", name: "Cooler" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902872/wixjjyigvwuuvc8qkejd.png", name: "Mouse" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902907/hu2lkaotd1kchctvarf2.png", name: "ROM" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902937/r4qeot5o8p9tiejo4khs.png", name: "Laptop" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902982/z4h4uuuma7fss77lzrwq.png", name: "RAM" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903002/kp53fezudqvjfwhsy5kb.png", name: "PC" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903028/ydhua7fjwaqvlpb12p1t.png", name: "Cables" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903087/aqwbgwaws1cwnbu0pz6h.png", name: "Camera" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903113/mvvzkzs5igj4do9wa137.png", name: "Speaker" },
+    { icon: "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903138/jdyvl6w6x07qmlfson28.png", name: "Network devices" }
   ];
 
   return (

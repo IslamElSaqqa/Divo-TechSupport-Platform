@@ -1,22 +1,22 @@
 // Top imports stay the same...
-import React, { useState, useEffect } from 'react';
-import styles from './Header_Table.module.css';
-import sharedCss from '../Shared.module.css';
-import { FaEdit } from 'react-icons/fa';
-import EditOverlay from '../EditOverlay/EditOverlay';
+import React, { useState, useEffect } from "react";
+import styles from "./Header_Table.module.css";
+import sharedCss from "../Shared.module.css";
+import { FaEdit } from "react-icons/fa";
+import EditOverlay from "../EditOverlay/EditOverlay";
 
 const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
   const [requests, setRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [userTypeFilter, setUserTypeFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [userTypeFilter, setUserTypeFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [showOverlay, setShowOverlay] = useState(false);
   const [editUser, setEditUser] = useState(null);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  const token = JSON.parse(sessionStorage.getItem('user'))?.token;
+  const token = JSON.parse(sessionStorage.getItem("user"))?.token;
   const itemsPerPage = 10;
 
   const fetchUsers = async () => {
@@ -24,7 +24,7 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
       let url = `/api/specialists/getSpecialistsPaginated?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}&sort=${sortOrder}`;
 
       const response = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const json = await response.json();
@@ -36,21 +36,25 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
     }
   };
 
-  useEffect(() => { fetchUsers(); }, [currentPage, searchTerm, sortOrder, userTypeFilter]);
+  useEffect(() => {
+    fetchUsers();
+  }, [currentPage, searchTerm, sortOrder, userTypeFilter]);
 
   const handleSelectAll = (e) => {
-    setSelectedItems(e.target.checked ? requests.map(item => item._id) : []);
+    setSelectedItems(e.target.checked ? requests.map((item) => item._id) : []);
   };
 
   const handleSelectItem = (id) => {
-    setSelectedItems(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]);
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
   };
 
   const handleDelete = async () => {
     for (let id of selectedItems) {
       await fetch(`/api/specialists/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
     }
     setSelectedItems([]);
@@ -58,22 +62,24 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
   };
 
   const handleOverlaySubmit = async (data) => {
-    const method = editUser ? 'PATCH' : 'POST';
-    const url = editUser ? `/api/specialists/${editUser._id}` : '/api/specialists/register';
+    const method = editUser ? "PATCH" : "POST";
+    const url = editUser
+      ? `/api/specialists/${editUser._id}`
+      : "/api/specialists/register";
 
     const payload = {
       ...data,
-      ...(editUser ? {} : { password: data.password_hash || 'Default@123' }) // ✅ FIXED FIELD
+      ...(editUser ? {} : { password: data.password_hash || "Default@123" }), // ✅ FIXED FIELD
     };
 
     await fetch(url, {
       method,
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(payload)
-    }).then(async res => {
+      body: JSON.stringify(payload),
+    }).then(async (res) => {
       const json = await res.json();
       if (!res.ok) {
         console.error("Error saving specialist:", json);
@@ -93,59 +99,76 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
   };
 
   const toggleSortOrder = () => {
-    setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
   const downloadCSV = async () => {
-  try {
-    const response = await fetch("/api/specialists/export/all", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const json = await response.json();
+    try {
+      const response = await fetch("/api/specialists/export/all", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const json = await response.json();
 
-    if (!response.ok) {
-      throw new Error(json.message || "Failed to download specialists");
+      if (!response.ok) {
+        throw new Error(json.message || "Failed to download specialists");
+      }
+
+      const header = ["User ID", "Name", "Email", "Phone", "Specialization"];
+      const rows = json.specialists.map((user) => [
+        user._id,
+        user.name,
+        user.email,
+        user.phone_number,
+        user.specialization,
+      ]);
+      const csv = [header, ...rows].map((row) => row.join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "all_specialists.csv";
+      a.click();
+    } catch (err) {
+      console.error("Download error:", err);
+      alert("Could not export specialists");
     }
-
-    const header = ['User ID', 'Name', 'Email', 'Phone', 'Specialization'];
-    const rows = json.specialists.map(user => [
-      user._id,
-      user.name,
-      user.email,
-      user.phone_number,
-      user.specialization
-    ]);
-    const csv = [header, ...rows].map(row => row.join(",")).join("\n");
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'all_specialists.csv';
-    a.click();
-  } catch (err) {
-    console.error("Download error:", err);
-    alert("Could not export specialists");
-  }
-};
-
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.profile}>
-          <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/rectangl.png" alt="Profile" className={styles.profileImg} />
+          <img
+            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906567/r4u7tmrd6fc3ncvmkriv.jpg"
+            alt="Profile"
+            className={styles.profileImg}
+          />
           <span className={styles.profileName}>{profileName}</span>
-          <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/chevron.png" alt="Chevron" className={styles.chevron} />
+          <img
+            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906302/bsijv3m5stxbhvj3iah3.png"
+            alt="Chevron"
+            className={styles.chevron}
+          />
         </div>
       </div>
 
       <div className={sharedCss.innerDivArea}>
         {/* Control buttons and search */}
         <div className={styles.controls}>
-          <div className={styles.addButton} onClick={() => { setEditUser(null); setShowOverlay(true); }}>
+          <div
+            className={styles.addButton}
+            onClick={() => {
+              setEditUser(null);
+              setShowOverlay(true);
+            }}
+          >
             <span>Add</span>
-            <img className={styles.addImg} src="https://dashboard.codeparrot.ai/api/image/Z9MAtCppvFKitUEH/image-90.png" alt="add" />
+            <img
+              className={styles.addImg}
+              src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906274/mqqz3wkwquqmqn6bfopi.png"
+              alt="add"
+            />
           </div>
           <input
             type="text"
@@ -155,15 +178,25 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className={styles.downloadBtn} onClick={toggleSortOrder}>
-            Sort: {sortOrder === 'asc' ? 'Oldest' : 'Newest'}
+            Sort: {sortOrder === "asc" ? "Oldest" : "Newest"}
           </button>
-          <button className={styles.deleteBtn} onClick={handleDelete} disabled={selectedItems.length === 0}>
+          <button
+            className={styles.deleteBtn}
+            onClick={handleDelete}
+            disabled={selectedItems.length === 0}
+          >
             <span>Delete</span>
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/group-33-6.png" alt="Delete" />
+            <img
+              src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906180/m06r27iq3dm46qbqqjdb.png"
+              alt="Delete"
+            />
           </button>
           <button className={styles.downloadBtn} onClick={downloadCSV}>
             <span>Download</span>
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/group-33-5.png" alt="Download" />
+            <img
+              src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906196/id9nplr0ij8jubcpehwl.png"
+              alt="Download"
+            />
           </button>
         </div>
 
@@ -173,7 +206,11 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
             <thead>
               <tr>
                 <th className={styles.checkboxCell}>
-                  <input type="checkbox" onChange={handleSelectAll} checked={selectedItems.length === requests.length} />
+                  <input
+                    type="checkbox"
+                    onChange={handleSelectAll}
+                    checked={selectedItems.length === requests.length}
+                  />
                   <span>All</span>
                 </th>
                 <th>User ID</th>
@@ -185,10 +222,14 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
               </tr>
             </thead>
             <tbody>
-              {requests.map(user => (
+              {requests.map((user) => (
                 <tr key={user._id}>
                   <td className={styles.checkboxCell}>
-                    <input type="checkbox" checked={selectedItems.includes(user._id)} onChange={() => handleSelectItem(user._id)} />
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(user._id)}
+                      onChange={() => handleSelectItem(user._id)}
+                    />
                   </td>
                   <td>{user._id}</td>
                   <td>{user.name}</td>
@@ -196,7 +237,10 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
                   <td>{user.phone_number}</td>
                   <td>{user.specialization}</td>
                   <td>
-                    <FaEdit className={styles.editIcon} onClick={() => openEditForm(user)} />
+                    <FaEdit
+                      className={styles.editIcon}
+                      onClick={() => openEditForm(user)}
+                    />
                   </td>
                 </tr>
               ))}
@@ -206,34 +250,52 @@ const Header_Table = ({ title = "All Specialists", profileName = "Admin" }) => {
 
         {/* Pagination */}
         <div className={styles.pagination}>
-          <button className={styles.paginationBtn} onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Previous</button>
+          <button
+            className={styles.paginationBtn}
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
           <div className={styles.pageNumbers}>
-            <span onClick={() => {
-              const neededPage = parseInt(prompt("Please type the page you want to go to"));
-              if (isNaN(neededPage)) {
-                alert("Please write a number");
-                return;
-              }
-              if (neededPage < 1 || neededPage > totalPages) {
-                alert(`Please keep the number between 1 and ${totalPages}`);
-                return;
-              }
-              setCurrentPage(neededPage);
-            }}>Page {currentPage} out of {totalPages}</span>
+            <span
+              onClick={() => {
+                const neededPage = parseInt(
+                  prompt("Please type the page you want to go to")
+                );
+                if (isNaN(neededPage)) {
+                  alert("Please write a number");
+                  return;
+                }
+                if (neededPage < 1 || neededPage > totalPages) {
+                  alert(`Please keep the number between 1 and ${totalPages}`);
+                  return;
+                }
+                setCurrentPage(neededPage);
+              }}
+            >
+              Page {currentPage} out of {totalPages}
+            </span>
           </div>
-          <button className={styles.paginationBtn} onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>Next</button>
+          <button
+            className={styles.paginationBtn}
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
         </div>
       </div>
 
       {showOverlay && (
         <EditOverlay
-          title={editUser ? 'Edit Specialist' : 'Add Specialist'}
+          title={editUser ? "Edit Specialist" : "Add Specialist"}
           fieldsJson={{
-            name: 'text',
-            email: 'email',
-            phone_number: 'text',
-            ...(editUser ? {} : { password_hash: 'password' }),
-            specialization: 'text'
+            name: "text",
+            email: "email",
+            phone_number: "text",
+            ...(editUser ? {} : { password_hash: "password" }),
+            specialization: "text",
           }}
           initialValues={editUser}
           onCancel={() => setShowOverlay(false)}

@@ -8,7 +8,7 @@ const ContactInfoSection = () => {
       <div className="contact-info-container">
         <div className="contact-group">
           <div className="header-group">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9DVgyppvFKitT9L/icons-ph.png" alt="Phone Icon" className="icon" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905474/v2fjvv5nosz3dchaimbf.png" alt="Phone Icon" className="icon" />
             <h3 className="section-title">Call Us</h3>
           </div>
           <div className="info-text">
@@ -21,7 +21,7 @@ const ContactInfoSection = () => {
 
         <div className="contact-group">
           <div className="header-group">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9DVgyppvFKitT9L/icons-ma.png" alt="Mail Icon" className="icon" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905566/xd9wcjn3w3sycaquweql.png" alt="Mail Icon" className="icon" />
             <h3 className="section-title">Write US</h3>
           </div>
           <div className="info-text">

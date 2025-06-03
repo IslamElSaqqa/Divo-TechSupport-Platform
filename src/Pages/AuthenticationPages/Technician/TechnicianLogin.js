@@ -60,7 +60,7 @@ const TechnicianLogin = () => {
             <ToastContainer />
         <div className="side-image">
             <img 
-            src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/side-ima.png"
+            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886577/p7mn9byalpc5ze8zh4rh.png"
             alt="Repair Service" 
             className="repair-image"
             /> 

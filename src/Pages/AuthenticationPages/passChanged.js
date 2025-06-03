@@ -12,7 +12,7 @@ const PassChanged = () => {
         <div className="success-container">
         <div className="success-content">
             <div className="success-image">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z8itkawi-41-yX4R/success.png" alt="Success" width="200" height="200" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748901170/mug8zieqqaoburydclox.png" alt="Success" width="200" height="200" />
             </div>
             <h1 className="success-title">Password changed successfully</h1>
             <button className="home-button" onClick={onHomeClick}>
