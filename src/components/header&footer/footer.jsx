@@ -49,6 +49,9 @@ const FooterAccountSection = () => {
         <a href="/login" className="footer-account-link">
           Login / Register
         </a>
+        <a href="/tech" className="footer-account-link">
+          Iam an IT Technician
+        </a>
       </div>
     </div>
   );

@@ -29,6 +29,9 @@ const OnlineServicing = () => {
     // const selectedSpecialistId = "67d889a81a9fb45d5d583a19"
     const sessionData = {
       user: user._id,
+      phone_number: user.phone_number,
+      username: user.username,
+
       // specialist: selectedSpecialistId,
       instapay_reference: refId,
       steps: steps,

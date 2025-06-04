@@ -1,9 +1,17 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+
 
 const FlashSales = () => {
   const scrollContainer = React.useRef(null);
   const Stars_count = (rating) => Math.round(rating);
+  const navigate = useNavigate();
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll up smoothly
+      navigate("/store");
+    };
 
   const scrollLeft = () => {
     if (scrollContainer.current) {
@@ -131,7 +139,7 @@ const FlashSales = () => {
       </div>
 
       <div className="view-all-container">
-        <button className="view-all-btn">View All Products</button>
+        <button className="view-all-btn"onClick={handleSubmit}> View All Products</button>
       </div>
     </div>
   );
