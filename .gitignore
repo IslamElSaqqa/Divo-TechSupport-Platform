@@ -6,6 +6,8 @@ node_modules/
 # firebase configuration file
 config/
 Notes.txt
+certs/
+cloudinaryInfo.txt
 # Logs
 logs
 *.log

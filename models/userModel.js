@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-  created_at: { type: Date, default: Date.now },
+    created_at: { type: Date, default: Date.now },
 
     last_login: Date,
     user_presence: {
@@ -62,6 +62,7 @@ const userSchema = new mongoose.Schema({
         rating: Number
         },
     ],
+    profile_image: String
 })
 
 // Register User
@@ -121,10 +122,10 @@ userSchema.statics.login = async function (identifier, password) {
     if (!identifier || !password) { 
         throw Error('All Fields must be filled')
     }
-
+    // 
     // Find specialist by email Or phone number
     const user = await this.findOne({
-        $or: [{ email: identifier }, { phone_number: identifier }, {username: identifier}]
+        $or: [{ email: identifier }, { phone_number: identifier },{username: identifier} ]
     }).select('+password_hash');
 
     if (!user) {

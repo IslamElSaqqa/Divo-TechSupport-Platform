@@ -18,6 +18,8 @@ const {
     sharePost,
     deletePost,
     updatePost,
+    updateComment,
+    deleteComment 
 } = require('../controllers/communityController')
 
 const { requireAuth } = require('../middleware/requireAuth')
@@ -69,6 +71,10 @@ router.delete('/:id', requireAuth, deletePost)
 // Update a post
 // Access => Logged in users only
 router.patch('/:id', requireAuth, updatePost)
+
+// comment routes
+router.put('/:postId/comments/:commentId', requireAuth, updateComment);
+router.delete('/:postId/comments/:commentId', requireAuth, deleteComment);
 
 // export all routes
 module.exports = router 

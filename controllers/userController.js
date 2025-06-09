@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
+const cloudinary = require("../Cloudinary/cloudinary");
+
 
 // Create token
 const createToken = ({ _id, user_presence }) => {
@@ -68,7 +70,7 @@ const getUser = async (req, res) => {
 // Update user profile
 const updateProfile = async (req, res) => {
   const userId = req.params.id;
-  const { username, email, phone_number, currentPassword, newPassword, confirmPassword } = req.body;
+  const { username, email, phone_number, currentPassword, newPassword, confirmPassword} = req.body;
 
   try {
     const user = await User.findById(userId).select("+password_hash");
@@ -145,7 +147,9 @@ const SignupUser = async (req, res) => {
         email,
         username,
         token,
-        user_presence
+        user_presence,
+        phone_number,
+        profile_image: user.profile_image,
       }
     });
   } catch (error) {
@@ -165,7 +169,9 @@ const loginUser = async (req, res) => {
       userId: user._id,
       token,
       username: user.username,
-      user_presence: user.user_presence
+      user_presence: user.user_presence,
+      phone_number: user.phone_number,
+      profile_image: user.profile_image
     });
     user.last_login = new Date();
   } catch (error) {
@@ -201,6 +207,61 @@ const getUserPosts = async (req, res) => {
   }
 };
 
+
+const uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: "No file uploaded" });
+        }
+
+        // Upload file to Cloudinary
+        const result = await cloudinary.uploader.upload(
+            req.file.path,
+            {
+                folder: "user_profile", 
+                use_filename: true,
+                unique_filename: false,
+            }
+        );
+
+        res.status(200).json({ success: true, imageUrl: result.secure_url });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error uploading image",
+            error: error.message
+        });
+    }
+};
+
+// update profile image: 
+const updateProfileImage = async (req, res) => {
+  const userId = req.user._id;
+  const { profile_image } = req.body;
+
+  try {
+    if (!profile_image) {
+      return res.status(400).json({ error: "No image URL provided" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.profile_image = profile_image;
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile image updated",
+      imageUrl: profile_image
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   getUsers,
   getUser,
@@ -209,5 +270,7 @@ module.exports = {
   loginUser,
   SignupUser,
   getUserPosts,
-  adminUpdateProfile
+  adminUpdateProfile,
+  uploadProfileImage,
+  updateProfileImage
 };

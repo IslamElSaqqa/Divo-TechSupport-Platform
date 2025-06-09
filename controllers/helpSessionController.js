@@ -36,7 +36,8 @@ const createHelpSession = async (req, res) => {
         const newSessionData = {
             user: {
                 _id: foundUser._id,
-                username: foundUser.username
+                username: foundUser.username,
+                phone_number: foundUser.phone_number,
             },
             instapay_reference,
             note,

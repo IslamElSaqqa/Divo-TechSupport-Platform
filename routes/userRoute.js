@@ -1,5 +1,7 @@
 const express = require("express")
 const router = express.Router()
+const { uploadImage } = require("../middleware/multer");
+
 const {
     getUserPosts,
     getUser,
@@ -9,6 +11,8 @@ const {
     loginUser,
     SignupUser,
     adminUpdateProfile,
+    uploadProfileImage,
+    updateProfileImage,
 } = require("../controllers/userController")
 // protecting API routes
 const { requireAuth, requireAdmin } = require('../middleware/requireAuth')
@@ -46,4 +50,11 @@ router.post("/login", loginUser)
 // Register user
 // #route POST /api/users/register
 router.post("/register", SignupUser) 
+
+
+// upload profile image
+router.post("/upload/profile-image", requireAuth, uploadImage.single("profile-image"), uploadProfileImage);
+
+router.patch("/profile-image/:id", requireAuth, updateProfileImage)
+
 module.exports = router

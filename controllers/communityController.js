@@ -85,6 +85,117 @@ const getAllPosts = async (req, res) => {
     }
 };
 
+const updateComment = async (req, res) => {
+    try {
+        const { postId, commentId } = req.params;
+        const { content } = req.body;
+        const userId = req.user._id;
+
+        if (!content || content.trim().length === 0) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Comment content cannot be empty" 
+            });
+        }
+
+        // Find the post
+        const post = await CommunityPost.findById(postId);
+        if (!post) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Post not found" 
+            });
+        }
+
+        // Find the comment
+        const comment = post.comments.id(commentId);
+        if (!comment) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Comment not found" 
+            });
+        }
+
+        // Check if user owns the comment
+        if (comment.user_id.toString() !== userId.toString()) {
+            return res.status(403).json({ 
+                success: false, 
+                message: "Not authorized to update this comment" 
+            });
+        }
+
+        // Update the comment
+        comment.content = content.trim();
+        comment.updated_at = new Date();
+        comment.is_edited = true;
+
+        await post.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Comment updated successfully",
+            comment: comment
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error updating comment",
+            error: error.message
+        });
+    }
+};
+
+// Delete a comment
+const deleteComment = async (req, res) => {
+    try {
+        const { postId, commentId } = req.params;
+        const userId = req.user._id;
+
+        // Find the post
+        const post = await CommunityPost.findById(postId);
+        if (!post) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Post not found" 
+            });
+        }
+
+        // Find the comment
+        const comment = post.comments.id(commentId);
+        if (!comment) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Comment not found" 
+            });
+        }
+
+        // Check if user owns the comment
+        if (comment.user_id.toString() !== userId.toString()) {
+            return res.status(403).json({ 
+                success: false, 
+                message: "Not authorized to delete this comment" 
+            });
+        }
+
+        // Remove the comment
+        post.comments.pull(commentId);
+        await post.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Comment deleted successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error deleting comment",
+            error: error.message
+        });
+    }
+};
+
 //Get a post
 // @route /api/community/posts/:id
 const getPost = async (req, res) => {
@@ -141,7 +252,7 @@ const createPost = async (req, res) => {
         }
 
         // Fetch user details from the database
-        const user = await User.findById(userId).select("_id username");
+        const user = await User.findById(userId).select("_id username profile_image");
 
         // Check if user exists
         if (!user) {
@@ -163,12 +274,13 @@ const createPost = async (req, res) => {
         const newPost = await CommunityPost.create({
             user: {
                 _id: user._id,
-                username: user.username
+                username: user.username,
+                profile_image: user.profile_image || '',
             },
             content,
             image_url: image_url || "",
             hashtags,
-            views: views || 0, // Default to 0 if not provided
+            views: views || 0,
             comments: formattedComments
         });
 
@@ -312,17 +424,25 @@ const addComment = async (req, res) => {
         return res.status(404).json({ error: 'Post not found' });
         }
 
+        const user = await User.findById(req.user._id).select("profile_image");
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
         const comment = {
         user_id: req.user._id,
         username,
         content,
-        createdAt: new Date()
+        profile_image: user.profile_image || '', 
+        created_at: new Date(), 
         };
 
         post.comments.push(comment);
         await post.save();
 
-        res.status(201).json({ message: 'Comment added:', comment });
+        const newComment = post.comments[post.comments.length - 1].toObject();
+
+        res.status(201).json({ message: 'Comment added:', comment: newComment  });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Something went wrong' });
@@ -344,7 +464,7 @@ const getPostComments = async (req, res) => {
         }
         // pre sort before pagination
     const sortedComments = post.comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    paginatedComments = sortedComments.slice(skip, skip + limit);
+    paginatedComments = sortedComments.slice(skip, skip + limit).map(comment => comment.toObject ? comment.toObject() : comment);;
         console.log(paginatedComments)
         res.status(200).json({
             success: true,
@@ -462,7 +582,11 @@ const updatePost = async (req, res) => {
         // If content is provided, use it; otherwise, retain the original content
         const updatedPost = await CommunityPost.findByIdAndUpdate(
             postId,
-            { content: content || post.content },
+            { 
+                content: content || post.content,
+                updated_at: new Date(),  // Add timestamp
+                is_edited: true          // Mark as edited
+            },
             { new: true, runValidators: true }
         );
 
@@ -492,5 +616,7 @@ module.exports = {
     addComment,
     getPostComments,
     likePost,
-    unlikePost
+    unlikePost,
+    updateComment,
+    deleteComment
 }
