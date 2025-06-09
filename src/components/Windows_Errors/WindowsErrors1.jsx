@@ -49,30 +49,30 @@ const WindowsErrors1 = () => {
         <div className="card">
           <h3>How to fix the blue screen of death error in windows 10</h3>
           <div className="image-container">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9Criud_tb-16vJL/image-92.png" alt="Blue screen" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903536/hnrn8kxcjtzipdlp2mo9.png" alt="Blue screen" />
           </div>
           <div className="card-footer">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9Criud_tb-16vJL/group-3.png" alt="Group icon" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903653/cqfmjmak8pe5pvzxh2v2.png" alt="Group icon" />
           </div>
         </div>
 
         <div className="card">
           <h3>Error Messages in Windows 7</h3>
           <div className="image-container">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9Criud_tb-16vJL/image-95.png" alt="Error message" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903591/kqlcxxtei1fqnfmfkm2l.png" alt="Error message" />
           </div>
           <div className="card-footer">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9Criud_tb-16vJL/group-3-2.png" alt="Group icon" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903653/cqfmjmak8pe5pvzxh2v2.png" alt="Group icon" />
           </div>
         </div>
 
         <div className="card">
           <h3>Windows XP error</h3>
           <div className="image-container">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9Criud_tb-16vJL/image-94.png" alt="Windows XP error" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903624/lmctaeyfanryyusiouwy.png" alt="Windows XP error" />
           </div>
           <div className="card-footer">
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9Criud_tb-16vJL/group-3-3.png" alt="Group icon" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903653/cqfmjmak8pe5pvzxh2v2.png" alt="Group icon" />
           </div>
         </div>
       </div>

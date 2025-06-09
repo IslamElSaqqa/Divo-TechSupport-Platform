@@ -44,7 +44,7 @@ const SignUp = () => {
             <ToastContainer />
         <div className="side-image">
             <img 
-                src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/side-ima.png"
+                src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748885511/dvvntyezwaaggu2png5q.png"
                 alt="Repair Service" 
                 className="repair-image"
             />
@@ -77,7 +77,7 @@ const SignUp = () => {
 
                 <div className="input-group">
                     <input
-                            type="text" placeholder="Phone number"
+                            type="text" placeholder="Contact phone number"
                             value={phoneNumber}
                             onChange={(e)=> setPhoneNumber(e.target.value)}
                     />
@@ -97,10 +97,10 @@ const SignUp = () => {
                     Create Account
                 </button>
 
-                <button type="button" className="google-signup-btn">
-                    <img src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/icon-goo.png" alt="Google" />
+                {/* <button type="button" className="google-signup-btn">
+                    <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886332/aowvjiwbegdopkcga4vu.png" alt="Google" />
                     <span>Sign up with Google</span>
-                </button>
+                </button> */}
 
                 <div className="login-prompt">
                     <span>Already have account?</span>

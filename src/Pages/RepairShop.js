@@ -69,7 +69,7 @@ const RepairShops = () => {
                                 onChange={handleInputChange}
                             />
                             <img
-                                src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/componen.png"
+                                src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903487/fgjefceq9ce7dtq9xfti.png"
                                 alt="Search"
                                 className="search-icon"
                             />
@@ -93,7 +93,7 @@ const RepairShops = () => {
                         <div key={index} className="store-item">
                             <div className="store-icon-wrapper">
                                 <img
-                                    src="https://dashboard.codeparrot.ai/api/image/Z9S4MJIdzXb5OlMf/store-re-6.png"
+                                    src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903400/kzpxrycefweqbfhontls.png"
                                     alt={store.name}
                                     className="store-icon"
                                 />
@@ -102,7 +102,7 @@ const RepairShops = () => {
                                 <h3 className="store-name">{store.name}</h3>
                                 <div className="location-wrapper">
                                     <img
-                                        src="https://dashboard.codeparrot.ai/api/image/Z9S4MJIdzXb5OlMf/map-soli.png"
+                                        src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903430/ftqmxvmuwq97e9is8hpc.png"
                                         alt="Location"
                                         className="location-icon"
                                     />
@@ -114,7 +114,7 @@ const RepairShops = () => {
                                         {[...Array(Stars_count(store.rating))].map((_, i) => (
                                             <img
                                                 key={i}
-                                                src="https://dashboard.codeparrot.ai/api/image/Z9S4MJIdzXb5OlMf/star-sol-6.png"
+                                                src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902264/rtjr3udbcu57sk3il6r4.png"
                                                 alt="Star"
                                                 className="star-icon"
                                             />
@@ -125,7 +125,7 @@ const RepairShops = () => {
                             <div className="navigate-wrapper">
                                 <a href={store.link} target="_blank" rel="noopener noreferrer">
                                     <img
-                                        src="https://dashboard.codeparrot.ai/api/image/Z9S4MJIdzXb5OlMf/right-ar.png"
+                                        src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748903449/vlkx8k1snkbmaf4atrkf.png"
                                         alt="Navigate"
                                         className="navigate-icon"
                                     />

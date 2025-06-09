@@ -10,10 +10,13 @@ import { useUpdatePost } from "../../Hooks/Community/useUpdatePost"
 import { useTogglePost } from '../../Hooks/Community/useTogglePost';
 import { useAddComment } from '../../Hooks/Community/useAddComment';
 import { useGetPostComments } from '../../Hooks/Community/useGetPostComments';
+import { useUpdateComment } from '../../Hooks/Community/useUpdateComment';
+import { useDeleteComment } from '../../Hooks/Community/useDeleteComment';
+import { formatDate, formatFullDate } from '../../utils/dateHelpers';
 
-import  Picker  from '@emoji-mart/react';
+import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
-import { useClickOutside } from '../../Hooks/Community/useClickOutside'; 
+import { useClickOutside } from '../../Hooks/Community/useClickOutside';
 
 const Community = () => {
   const [content, setContent] = useState('');
@@ -22,7 +25,7 @@ const Community = () => {
   const [authError, setAuthError] = useState('');
   const [commentInputs, setCommentInputs] = useState({});
   const { isLoading, error, createPost } = useCreatePost();
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const { user } = useAuthContext();
   const { posts, dispatch } = useCommunityContext()
   const { deletePost, isDeleteLoading, deleteError } = useDeletePost();
@@ -41,10 +44,14 @@ const Community = () => {
   const [activePostId, setActivePostId] = useState(null)
   const [commentsByPost, setCommentsByPost] = useState({});
   const [commentPageByPost, setCommentPageByPost] = useState({});
-  const [hasMoreCommentsByPost, setHasMoreCommentsByPost] = useState({}); 
+  const [hasMoreCommentsByPost, setHasMoreCommentsByPost] = useState({});
   const { getPostComments, errorComments } = useGetPostComments();
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedCommentContent, setEditedCommentContent] = useState('');
+  const { updateComment, isLoadingUpdate, errorUpdate } = useUpdateComment();
+  const { deleteComment, isLoadingDelete, errorDelete } = useDeleteComment();
 
-    // Handle fetching & scroll-based pagination of comments per post
+  // Handle fetching & scroll-based pagination of comments per post
   const observer = useRef({});
   const lastCommentRef = (postId) => (node) => {
     if (isFetchingRef.current || !hasMoreCommentsByPost[postId]) return;
@@ -79,7 +86,7 @@ const Community = () => {
   useEffect(() => {
     fetchPosts(1); // Initial fetch on mount
   }, [user]);
-  
+
 
   // using another useEffect to handle scroll of getting posts
   useEffect(() => {
@@ -87,21 +94,21 @@ const Community = () => {
       const scrollTop = window.scrollY;
       const windowHeight = window.innerHeight;
       const docHeight = document.body.offsetHeight;
-  
+
       if (scrollTop + windowHeight >= docHeight - 100 && !isFetchingRef.current) {
         fetchPosts(page + 1);
       }
     };
-  
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [page, hasMore]);
-  
+
 
   const fetchPosts = async (pageNum = 1) => {
     if (isFetchingRef.current || !hasMore) return;
     isFetchingRef.current = true;
-  
+
     try {
       const res = await fetch(`/api/community/posts?page=${pageNum}&limit=5`, {
         method: 'GET',
@@ -109,25 +116,25 @@ const Community = () => {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!res.ok) {
         console.error('Failed to fetch posts');
         return;
       }
-  
+
       const data = await res.json();
       const newPosts = data.data || [];
-  
+
       if (newPosts.length < 5) {
-        setHasMore(false); 
+        setHasMore(false);
       }
-  
+
       if (pageNum === 1) {
         dispatch({ type: 'SET_POST', payload: newPosts });
       } else {
         dispatch({ type: 'ADD_POSTS', payload: newPosts });
       }
-  
+
       setPage(pageNum);
     } catch (err) {
       console.error('Error fetching posts:', err);
@@ -136,7 +143,7 @@ const Community = () => {
       setLoading(false);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -154,9 +161,9 @@ const Community = () => {
 
     const success = await createPost(postData);
     if (success) {
-        setContent('');
-        setImageUpload('');
-        toast.success('Post created successfully!', {
+      setContent('');
+      setImageUpload('');
+      toast.success('Post created successfully!', {
         position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
@@ -164,7 +171,7 @@ const Community = () => {
         pauseOnHover: false,
         draggable: true,
       });
-    
+
     }
   };
 
@@ -196,7 +203,7 @@ const Community = () => {
     // Call the updatePost function when ready to update
     const success = await updatePost(postId, editedContent);
 
-    if (success) {  
+    if (success) {
       dispatch({
         type: 'UPDATE_POST',
         payload: {
@@ -208,8 +215,8 @@ const Community = () => {
         position: 'top-right',
         autoClose: 1000,
       });
-      setTimeout(() => {  window.location.reload(); }, 1500)
-      
+      setTimeout(() => { window.location.reload(); }, 1500)
+
     } else {
       toast.error('Failed to update post', {
         position: 'top-right',
@@ -217,7 +224,7 @@ const Community = () => {
       });
     }
   };
-  
+
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -256,51 +263,86 @@ const Community = () => {
   };
 
   // fetching post comments
-const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
-  try {
-    const { comments: newComments, hasMore } = await getPostComments(postId, page, limit);
-    
-    setCommentsByPost((prev) => ({
-      ...prev,
-      [postId]: page === 1
-        ? newComments
-        : [...(prev[postId] || []), ...newComments],
-    }));
+  const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
+    try {
+      const { comments: newComments, hasMore } = await getPostComments(postId, page, limit);
 
-    setCommentPageByPost((prev) => ({
-      ...prev,
-      [postId]: page,
-    }));
+      setCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: page === 1
+          ? newComments
+          : [...(prev[postId] || []), ...newComments],
+      }));
 
-    setHasMoreCommentsByPost((prev) => ({
-      ...prev,
-      [postId]: hasMore,
-    }));
-  } catch (error) {
-    console.error("Error fetching comments:", error);
-  }
-};
+      setCommentPageByPost((prev) => ({
+        ...prev,
+        [postId]: page,
+      }));
+
+      setHasMoreCommentsByPost((prev) => ({
+        ...prev,
+        [postId]: hasMore,
+      }));
+
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
 
   // handle Adding Comment
   const handleAddComment = async (postId, navigate) => {
 
-  const comment = commentInputs[postId]?.trim();
-  if (!comment) return;
+    const comment = commentInputs[postId]?.trim();
+    if (!comment) return;
 
-  const success = await addComment(postId, comment, navigate);
+    const success = await addComment(postId, comment, navigate);
 
-  if (success) {
-    toast.success("Comment added!", {autoClose: 1500});
-    setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
+    if (success) {
+      toast.success("Comment added!", { autoClose: 1500 });
+      setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
+      fetchCommentsForPost(postId, 1);
 
-  } else {
+    } else {
       toast.error("Failed to add comment.");
-  }
-};
+    }
+  };
 
-// Check whether user liked the post or not!
+  // Check whether user liked the post or not!
   const hasUserLiked = (post) => {
     return user && Array.isArray(post.likedBy) && post.likedBy.includes(user._id);
+  };
+
+  const handleEditComment = (commentId, currentContent) => {
+    setEditingCommentId(commentId);
+    setEditedCommentContent(currentContent);
+  };
+
+  const handleUpdateComment = async (postId, commentId) => {
+    const success = await updateComment(postId, commentId, editedCommentContent);
+
+    if (success) {
+      toast.success('Comment updated successfully!', { autoClose: 1500 });
+      setEditingCommentId(null);
+      setEditedCommentContent('');
+      // Refresh comments for this post
+      fetchCommentsForPost(postId, 1);
+    } else {
+      toast.error('Failed to update comment');
+    }
+  };
+
+  const handleDeleteComment = async (postId, commentId) => {
+    if (window.confirm('Are you sure you want to delete this comment?')) {
+      const success = await deleteComment(postId, commentId);
+
+      if (success) {
+        toast.success('Comment deleted successfully!', { autoClose: 1500 });
+        // Refresh comments for this post
+        fetchCommentsForPost(postId, 1);
+      } else {
+        toast.error('Failed to delete comment');
+      }
+    }
   };
 
 
@@ -313,15 +355,15 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
         {deleteError && <div className="error">{deleteError}</div>}
         {updateError && <div className="error">{updateError}</div>}
         {errorToggle && <div className='error'>{errorToggle}</div>}
-        {errorAddingComment && <div className='error'>{ errorAddingComment}</div>}
-        {errorComments && <div className='error'>{ errorComments}</div>}
+        {errorAddingComment && <div className='error'>{errorAddingComment}</div>}
+        {errorComments && <div className='error'>{errorComments}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="create-post">
             <div className="top">
               <div className="user-text">
                 <img
-                  src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar.png"
+                  src={user?.profile_image || "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"}
                   alt="Avatar"
                   className="avatar"
                 />
@@ -365,7 +407,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                   }}
                 >
                   <img
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/image.png"
+                    src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905224/gplrj3upc1lx6aogxner.png"
                     alt="Image2"
                   />
                 </button>
@@ -385,7 +427,7 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                     onClick={() => setShowEmojiPicker((prev) => !prev)}
                   >
                     <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/emoji.png"
+                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748905258/vz5fwaf6knje5df4d2ib.png"
                       alt="Emoji"
                     />
                   </button>
@@ -425,64 +467,72 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                   <div className="user-info">
                     <img
                       src={
-                        post.user.avatar ||
-                        "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"
+                        post.user?.profile_image ||
+                        "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
                       }
                       alt="User avatar"
                       className="avatar"
                     />
                     <div className="user-details">
                       <h3 className="username-community">
-                        {post.user.username || "Unknown User"}
+                        {post.user?.username || "Unknown User"}
                       </h3>
+                      <div className="post-timestamp">
+                        <span>{formatDate(post.createdAt)}</span>
+                        {post.is_edited && (
+                          <span className="edited-indicator" title={`Edited ${formatFullDate(post.updated_at)}`}>
+                            (edited)
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div>
-  
-                  {user && post.user._id === user._id && (
-                    <>
-                      {/*Update functionality */}
-                      
+
+                    {user && post.user._id === user._id && (
+                      <>
+                        {/*Update functionality */}
+
                         <img onClick={() => !isUpdateLoading && handleEditClick(post._id, post.content)}
-                            style={{ cursor: isUpdateLoading ? 'not-allowed' : 'pointer', opacity: isUpdateLoading ? 0.6 : 1 }}
-                            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553462/edit-regular-240_rticyf.png"
-                            alt="Edit Menu"
-                            className="menu-icon"
+                          style={{ cursor: isUpdateLoading ? 'not-allowed' : 'pointer', opacity: isUpdateLoading ? 0.6 : 1 }}
+                          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553462/edit-regular-240_rticyf.png"
+                          alt="Edit Menu"
+                          className="menu-icon"
                         />
 
-                      {/* Delete Functionality */}
+                        {/* Delete Functionality */}
                         <img onClick={() => !isDeleteLoading && handleDelete(post._id)}
-                            style={{ cursor: isDeleteLoading ? 'not-allowed' : 'pointer', opacity: isDeleteLoading ? 0.6 : 1 }}
+                          style={{ cursor: isDeleteLoading ? 'not-allowed' : 'pointer', opacity: isDeleteLoading ? 0.6 : 1 }}
                           src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553320/trash-regular-240_veohgh.png"
                           alt="Delete Menu"
                           className="menu-icon"
                         />
-                    </>
-                  )}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
 
                 <div className="post-content">
-                {editingPostId === post._id ? (
-                  <>
-                    <textarea
-                      value={editedContent}
-                      onChange={(e) => setEditedContent(e.target.value)}
-                      rows={3}
-                      className="edit-textarea"
-                    />
+                  {editingPostId === post._id ? (
+                    <>
+                      <textarea
+                        value={editedContent}
+                        onChange={(e) => setEditedContent(e.target.value)}
+                        rows={3}
+                        className="edit-textarea"
+                      />
                       <button disabled={isUpdateLoading}
                         onClick={() => handleUpdate(post._id)} className="save-btn">
-                          Save
+                        Save
                       </button>
-                    <button onClick={() => setEditingPostId(null)} className="cancel-btn">
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <p className="content-text">{post.content}</p>
+                      <button onClick={() => setEditingPostId(null)} className="cancel-btn-community">
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <p className="content-text">{post.content}</p>
                   )}
-                  
+
 
                   {post.image_url && (
                     <img
@@ -501,15 +551,12 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                         cursor: isLoadingToggle ? 'not-allowed' : 'pointer',
 
                       }}>
-                      <img
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/thumbs-up.png"
-                        alt="Like"
-                      />
+
                       <img
                         src={
                           hasUserLiked(post)
                             ? "https://res.cloudinary.com/dr9yx1tod/image/upload/v1747341997/filled_heart_icon_rf7ubu.png"
-                          : "https://res.cloudinary.com/dr9yx1tod/image/upload/v1747341878/icons8-heart-100_kg64kd.png"
+                            : "https://res.cloudinary.com/dr9yx1tod/image/upload/v1747341878/icons8-heart-100_kg64kd.png"
                         }
                         alt="Heart"
                         className="heart-icon"
@@ -518,25 +565,27 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                     </div>
 
                     {/* Comment toggle & comment list */}
-                  <div
+                    <div
                       className="stat-item"
                       onClick={() => toggleComments(post._id)}
                     >
                       <img
-                        src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/chat-dots.png"
+                        src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748904625/lsoturowkhlj0ulbyyp5.png"
                         alt="Comment"
                       />
-                        <span>{Array.isArray(post.comments) ? post.comments.length : 0} Comments</span>
-                  </div>
+                      <span>{Array.isArray(post.comments) ? post.comments.length : 0} Comments</span>
+                    </div>
                   </div>
                 </div>
 
-                
-                  {/* Comment section */}
+
+                {/* Comment section */}
                 {activePostId === post._id && (
                   <div className="comments-section">
                     {(commentsByPost[post._id] || []).map((comment, idx, arr) => {
                       const isLast = idx === arr.length - 1;
+                      const isUserComment = user && comment.user_id === user._id;
+
                       return (
                         <div
                           className="Comment-group-box"
@@ -546,34 +595,101 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                           <div className="Comment-group-box-image">
                             <img
                               src={
-                                // Use a default avatar as API doesn't return one
-                                "https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-2.png"
+                                comment.profile_image || "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
                               }
                               alt="User avatar"
                               className="avatar"
                             />
                           </div>
                           <div className="Comment-group-box-content">
-                            <span className="Comment-group-box-content-username">
-                              {comment.username || 'Unknown'}
-                            </span>
-                            <div className="Comment-group-box-content-commented">
-                              {comment.content}
+                            <div className="comment-header">
+                              <span className="Comment-group-box-content-username">
+                                {comment.username || 'Unknown'}
+                              </span>
+                              <span className="comment-timestamp">
+                                {formatDate(comment.created_at)}
+                                {comment.is_edited && (
+                                  <span className="edited-indicator" title={`Edited ${formatFullDate(comment.updated_at)}`}>
+                                    (edited)
+                                  </span>
+                                )}
+                              </span>
+                              {isUserComment && (
+                                <div className="comment-actions-menu">
+                                  <button
+                                    className="comment-edit-btn"
+                                    onClick={() => handleEditComment(comment._id, comment.content)}
+                                    disabled={isLoadingUpdate}
+                                  >
+                                    <img
+                                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553462/edit-regular-240_rticyf.png"
+                                      alt="Edit"
+                                      className="comment-action-icon"
+                                    />
+                                  </button>
+                                  <button
+                                    className="comment-delete-btn"
+                                    onClick={() => handleDeleteComment(post._id, comment._id)}
+                                    disabled={isLoadingDelete}
+                                  >
+                                    <img
+                                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1746553320/trash-regular-240_veohgh.png"
+                                      alt="Delete"
+                                      className="comment-action-icon"
+                                    />
+                                  </button>
+                                </div>
+                              )}
                             </div>
+
+                            {editingCommentId === comment._id ? (
+                              <div className="edit-comment-section">
+                                <textarea
+                                  value={editedCommentContent}
+                                  onChange={(e) => setEditedCommentContent(e.target.value)}
+                                  className="edit-comment-textarea"
+                                  rows={2}
+                                />
+                                <div className="edit-comment-buttons">
+                                  <button
+                                    onClick={() => handleUpdateComment(post._id, comment._id)}
+                                    disabled={isLoadingUpdate}
+                                    className="save-comment-btn"
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setEditingCommentId(null);
+                                      setEditedCommentContent('');
+                                    }}
+                                    className="cancel-comment-btn"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="Comment-group-box-content-commented">
+                                {comment.content}
+                              </div>
+                            )}
                           </div>
                         </div>
-                    );
-                  })}
+                      );
+                    })}
 
-                {!hasMoreCommentsByPost[post._id] && (
-                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'orange' }}>No more comments</p>
+                    {!hasMoreCommentsByPost[post._id] && (
+                      <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'orange' }}>
+                        No more comments
+                      </p>
+                    )}
+                  </div>
                 )}
-            </div>
-              )}
 
                 <div className="post-comment">
                   <img
-                    src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/avatar-3.png"
+                    src={post.user.profile_image || "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"}
                     alt="User avatar"
                     className="avatar"
                   />
@@ -586,22 +702,22 @@ const fetchCommentsForPost = async (postId, page = 1, limit = 3) => {
                       setCommentInputs({ ...commentInputs, [post._id]: e.target.value })
                     }
                   />
-                
+
                   <div className="comment-actions"
                     style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
                   >
-                  
+
                     <img
-                      src="https://dashboard.codeparrot.ai/api/image/Z9SwAyppvFKitUIo/monotone-3.png"
+                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748904661/cajeeyxeouzxomualfp7.png"
                       alt="Add Comment"
                       className="action-icon"
                       onClick={() => !isLoadingComment && handleAddComment(post._id, navigate)}
-                      
+
                     />
                   </div>
 
                 </div>
-              
+
               </div>
             ))
           ) : (

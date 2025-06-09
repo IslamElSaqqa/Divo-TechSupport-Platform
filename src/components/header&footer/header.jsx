@@ -24,7 +24,7 @@ const Header = () => {
         <div className="header-container">
             <a href="/home">
             <img
-                src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/logo-and.png"
+                src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886083/e4bkaehxrl0tn4rvl4bt.png"
                 alt="Logo"
                 className="logo"
             />
@@ -46,7 +46,7 @@ const Header = () => {
             <div className="user-icons">
                 <a href="/community">
                 <img
-                    src="https://dashboard.codeparrot.ai/api/image/Z8YNMW9e-96e2cWq/communit.png"
+                    src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886159/naju8jyvllmtzgjvm30i.png"
                     alt="Community"
                     className="icon-community"
                 />

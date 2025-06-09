@@ -1,7 +1,6 @@
 import React from "react";
 
 const FooterLogoSection = () => {
-
   return (
     <div className="footer-logo-section">
       <div className="logo-container">
@@ -10,7 +9,6 @@ const FooterLogoSection = () => {
           alt="Divo Logo"
           className="divo-logo"
         />
-       
       </div>
     </div>
   );
@@ -51,6 +49,9 @@ const FooterAccountSection = () => {
         <a href="/login" className="footer-account-link">
           Login / Register
         </a>
+        <a href="/tech" className="footer-account-link">
+          Iam an IT Technician
+        </a>
       </div>
     </div>
   );
@@ -75,76 +76,7 @@ const FooterQuickLinkSection = () => {
   );
 };
 
-// const FooterDownloadAppSection = () => {
-//   return (
-//     <div className="footer-download-app">
-//       <h2 className="download-title">Download App</h2>
 
-//       <div className="download-content">
-//         <p className="save-text">Save $3 with App New User Only</p>
-
-//         <div className="download-options">
-//           <div className="qr-code">
-//             <img
-//               src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/qr-code.png"
-//               alt="QR Code"
-//               className="qr-image"
-//             />
-//           </div>
-
-//           <div className="app-buttons">
-//             <img
-//               src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/google-pl.png"
-//               alt="Google Play"
-//               className="store-button"
-//             />
-//             <img
-//               src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/app-store.png"
-//               alt="App Store"
-//               className="store-button"
-//             />
-//           </div>
-//         </div>
-//       </div>
-
-//       <div className="social-icons">
-//         <img
-//           src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/icon-fac.png"
-//           alt="Facebook"
-//           className="social-icon"
-//         />
-//         <img
-//           src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/icon-twi.png"
-//           alt="Twitter"
-//           className="social-icon"
-//         />
-//         <img
-//           src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/icon-ins.png"
-//           alt="Instagram"
-//           className="social-icon"
-//         />
-//         <img
-//           src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/icon-lin.png"
-//           alt="LinkedIn"
-//           className="social-icon"
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-const FooterCopyrightSection = () => {
-  return (
-    <div className="footer-copyright-section">
-      <div className="underline">
-        <img
-          src="https://dashboard.codeparrot.ai/api/image/Z8YUEshTinWyM7HC/under-lin.png"
-          alt="underline"
-        />
-      </div>
-    </div>
-  );
-};
 
 const Footer = () => {
   return (
@@ -154,9 +86,7 @@ const Footer = () => {
         <FooterSupportSection />
         <FooterAccountSection />
         <FooterQuickLinkSection />
-
       </div>
-      <FooterCopyrightSection />
     </div>
   );
 };

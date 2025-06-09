@@ -107,9 +107,9 @@ const Header_Table = ({ title = "All Users", profileName = "Admin" }) => {
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.profile}>
-         <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/rectangl.png" alt="Profile" className={styles.profileImg} />
+         <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906317/gnji7ei0twnensq3wydc.jpg" alt="Profile" className={styles.profileImg} />
                    <span className={styles.profileName}>{profileName}</span>
-                   <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/chevron.png" alt="Chevron" className={styles.chevron} />
+                   <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906302/bsijv3m5stxbhvj3iah3.png" alt="Chevron" className={styles.chevron} />
                 </div>
       </div>
 
@@ -117,7 +117,7 @@ const Header_Table = ({ title = "All Users", profileName = "Admin" }) => {
         <div className={styles.controls}>
           <div className={styles.addButton} onClick={() => { setEditUser(null); setShowOverlay(true); }}>
             <span>Add</span>
-                        <img className={styles.addImg} src="https://dashboard.codeparrot.ai/api/image/Z9MAtCppvFKitUEH/image-90.png" alt="add" />
+                        <img className={styles.addImg} src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906274/mqqz3wkwquqmqn6bfopi.png" alt="add" />
                       
           </div>
           <input
@@ -137,12 +137,12 @@ const Header_Table = ({ title = "All Users", profileName = "Admin" }) => {
           </button>
           <button className={styles.deleteBtn} onClick={handleDelete} disabled={selectedItems.length === 0}>
             <span>Delete</span>
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/group-33-6.png" alt="Delete" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906180/m06r27iq3dm46qbqqjdb.png" alt="Delete" />
           
           </button>
           <button className={styles.downloadBtn} onClick={downloadCSV}>
              <span>Download</span>
-            <img src="https://dashboard.codeparrot.ai/api/image/Z9LSe5IdzXb5OlG8/group-33-5.png" alt="Download" />
+            <img src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748906196/id9nplr0ij8jubcpehwl.png" alt="Download" />
           
           </button>
         </div>

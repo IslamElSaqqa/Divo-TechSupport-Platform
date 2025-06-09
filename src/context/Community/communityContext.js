@@ -44,6 +44,7 @@ export const communityReducer = (state, action) => {
             }
 
     case 'ADD_COMMENT':
+        console.log("ADD_COMMENT errr", action.payload.comment);
     return {
         ...state,
         posts: state.posts.map((post) =>
@@ -60,6 +61,29 @@ export const communityReducer = (state, action) => {
                 ...(state.commentsByPost?.[action.payload.postId] || []),
                 action.payload.comment,
             ], 
+        },
+    };
+
+    case 'DELETE_COMMENT':
+        console.log("DELETE_COMMENT errr", action.payload);
+        console.log("Previous comments:", state);
+    return {
+        ...state,
+        posts: state.posts.map((post) =>
+            post._id === action.payload.postId
+                ? {
+                    ...post,
+                    comments: post.comments.filter(
+                        (comment) => comment._id !== action.payload.commentId
+                    ),
+                }
+                : post
+        ),
+        commentsByPost: {
+            ...state.commentsByPost,
+            [action.payload.postId]: state.commentsByPost?.[action.payload.postId]?.filter(
+                (comment) => comment._id !== action.payload.commentId
+            ),
         },
     };
 

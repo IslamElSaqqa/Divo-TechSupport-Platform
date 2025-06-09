@@ -152,7 +152,7 @@ const HomeStores = () => {
                   {[...Array(Stars_count(store.rating))].map((_, i) => (
                     <img
                       key={i}
-                      src="https://dashboard.codeparrot.ai/api/image/Z9S4MJIdzXb5OlMf/star-sol-6.png"
+                      src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902264/rtjr3udbcu57sk3il6r4.png"
                       alt="Star"
                       className="star-icon"
                     />

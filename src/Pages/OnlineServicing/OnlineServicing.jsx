@@ -29,6 +29,9 @@ const OnlineServicing = () => {
     // const selectedSpecialistId = "67d889a81a9fb45d5d583a19"
     const sessionData = {
       user: user._id,
+      phone_number: user.phone_number,
+      username: user.username,
+
       // specialist: selectedSpecialistId,
       instapay_reference: refId,
       steps: steps,
@@ -173,7 +176,7 @@ const OnlineServicing = () => {
 
       <div className="qr-section">
         <img
-          src="https://dashboard.codeparrot.ai/api/image/Z89hh-d_tb-16vFL/c-0733554.png"
+          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902370/k0aibm0dsbkcdw5bsp6e.png"
           alt="QR Code"
           className="qr-image"
         />
@@ -181,7 +184,7 @@ const OnlineServicing = () => {
           <span>Application Fee:</span>
           <span className="fee-amount">100 EGP</span>
           <img
-            src="https://dashboard.codeparrot.ai/api/image/Z89hh-d_tb-16vFL/vector.png"
+            src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902453/yqqp8tpifnhlkzsdn3e8.png"
             alt="info"
             className="info-icon-small"
           />
