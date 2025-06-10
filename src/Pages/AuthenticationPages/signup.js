@@ -77,7 +77,7 @@ const SignUp = () => {
 
                 <div className="input-group">
                     <input
-                            type="text" placeholder="Phone number"
+                            type="text" placeholder="Contact phone number"
                             value={phoneNumber}
                             onChange={(e)=> setPhoneNumber(e.target.value)}
                     />

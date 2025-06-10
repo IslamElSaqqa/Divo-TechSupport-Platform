@@ -41,7 +41,7 @@ const Technician = () => {
         setPhone(profile.phone_number || "");
         setTechImage(
           profile.image_url ||
-            "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748907333/gnxjl4smryaxenstarj8.jpg"
+            "https://res.cloudinary.com/dr9yx1tod/image/upload/v1749469632/user_profile/profile-image-1749469629173.jpg"
         );
         setSpecialization(profile.specialization || "");
         setProfileFetched(true);

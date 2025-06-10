@@ -176,13 +176,13 @@ const OnlineServicing = () => {
 
       <div className="qr-section">
         <img
-          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902370/k0aibm0dsbkcdw5bsp6e.png"
+          src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1749472445/WhatsApp_Image_2025-06-09_at_15.24.51_d308449d_ph5pr8.jpg"
           alt="QR Code"
           className="qr-image"
         />
         <div className="fee-info">
           <span>Application Fee:</span>
-          <span className="fee-amount">100 EGP</span>
+          <span className="fee-amount">150 EGP</span>
           <img
             src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748902453/yqqp8tpifnhlkzsdn3e8.png"
             alt="info"
