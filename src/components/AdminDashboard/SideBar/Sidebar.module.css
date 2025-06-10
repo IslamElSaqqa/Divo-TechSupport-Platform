@@ -1,0 +1,106 @@
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  height: 100vh;
+  background-color: #ffae35;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 32px 35px 36px 50px;
+}
+
+.logo {
+  width: 115px;
+  height: 29.15px;
+  justify-content: center;
+
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.navbar {
+  padding: 16px 32px 32px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  flex: 1;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settingsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settingsLabel {
+  color: #495057;
+  font-family: 'Neue Montreal', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+  padding-left: 12px;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: 'Neue Montreal', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.navItem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+  background-color: #917348;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+  }
+
+  .navbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .navItem {
+    flex: 1 1 45%;
+    justify-content: center;
+  }
+}
+
