@@ -44,7 +44,7 @@ const Header = () => {
             </div>
 
             <div className="user-icons">
-                <a href="/community">
+                <a style={{height:"40px"}} href="/community">
                 <img
                     src="https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886159/naju8jyvllmtzgjvm30i.png"
                     alt="Community"

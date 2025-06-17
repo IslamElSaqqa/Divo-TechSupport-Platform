@@ -18,7 +18,49 @@ import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { useClickOutside } from '../../Hooks/Community/useClickOutside';
 
+// Custom Confirmation Modal Component
+const ConfirmationModal = ({ isOpen, onConfirm, onCancel, title, message, confirmText = "Delete", cancelText = "Cancel" }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
+          <h3 className="modal-title">{title}</h3>
+        </div>
+        <div className="modal-body">
+          <p className="modal-message">{message}</p>
+        </div>
+        <div className="modal-footer">
+          <button 
+            className="modal-btn cancel-btn" 
+            onClick={onCancel}
+          >
+            {cancelText}
+          </button>
+          <button 
+            className="modal-btn confirm-btn" 
+            onClick={onConfirm}
+          >
+            {confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 const Community = () => {
+  
+  // Delete confirmation states for comments
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
+  
+  // Delete confirmation states for posts
+  const [showDeletePostModal, setShowDeletePostModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+  
   const [content, setContent] = useState('');
   const [imageUpload, setImageUpload] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -175,20 +217,37 @@ const Community = () => {
     }
   };
 
-  // handle delete
+  // Updated handle delete to show confirmation modal
   const handleDelete = async (postId) => {
-    const success = await deletePost(postId);
-    if (success) {
-      toast.success('Post deleted successfully', {
-        position: 'top-right',
-        autoClose: 2000,
-      });
-    } else {
-      toast.error('Failed to delete post', {
-        position: 'top-right',
-        autoClose: 3000,
-      });
+    setPostToDelete(postId);
+    setShowDeletePostModal(true);
+  };
+
+  // Add this new function for confirming post deletion
+  const confirmDeletePost = async () => {
+    if (postToDelete) {
+      const success = await deletePost(postToDelete);
+      if (success) {
+        toast.success('Post deleted successfully', {
+          position: 'top-right',
+          autoClose: 2000,
+        });
+      } else {
+        toast.error('Failed to delete post', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }
     }
+    
+    setShowDeletePostModal(false);
+    setPostToDelete(null);
+  };
+
+  // Add this function for canceling post deletion
+  const cancelDeletePost = () => {
+    setShowDeletePostModal(false);
+    setPostToDelete(null);
   };
 
   // handle Edit Click before Update
@@ -215,7 +274,10 @@ const Community = () => {
         position: 'top-right',
         autoClose: 1000,
       });
-      setTimeout(() => { window.location.reload(); }, 1500)
+
+        setEditingPostId(null);
+        setEditedContent('');
+      // setTimeout(() => { window.location.reload(); }, 1500)
 
     } else {
       toast.error('Failed to update post', {
@@ -332,7 +394,14 @@ const Community = () => {
   };
 
   const handleDeleteComment = async (postId, commentId) => {
-    if (window.confirm('Are you sure you want to delete this comment?')) {
+    setCommentToDelete({ postId, commentId });
+    setShowDeleteModal(true);
+  };
+
+  // Add this new function for confirming the comment deletion
+  const confirmDeleteComment = async () => {
+    if (commentToDelete) {
+      const { postId, commentId } = commentToDelete;
       const success = await deleteComment(postId, commentId);
 
       if (success) {
@@ -343,8 +412,17 @@ const Community = () => {
         toast.error('Failed to delete comment');
       }
     }
+    
+    setShowDeleteModal(false);
+    setCommentToDelete(null);
   };
 
+  // Add this function for canceling the comment deletion
+  const cancelDeleteComment = () => {
+    setShowDeleteModal(false);
+    setCommentToDelete(null);
+  };
+  
 
   return (
     <div className="content-container">
@@ -362,11 +440,14 @@ const Community = () => {
           <div className="create-post">
             <div className="top">
               <div className="user-text">
-                <img
-                  src={user?.profile_image || "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"}
-                  alt="Avatar"
-                  className="avatar"
-                />
+                 <img
+                      src={
+                        user?.profile_image ||
+                        "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"
+                      }
+                      alt="User avatar"
+                      className="avatar"
+                    />
                 <textarea
                   rows={4}
                   type="text"
@@ -689,7 +770,7 @@ const Community = () => {
 
                 <div className="post-comment">
                   <img
-                    src={post.user.profile_image || "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"}
+                    src={user?.profile_image || "https://res.cloudinary.com/dr9yx1tod/image/upload/v1748886234/ivrbbqhag7lp8l9bfmkv.png"}
                     alt="User avatar"
                     className="avatar"
                   />
@@ -723,7 +804,31 @@ const Community = () => {
           ) : (
             <span className="orange-text-posts">No Posts Yet!</span>
           )}
+          
         </div>
+        
+        {/* Comment Delete Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showDeleteModal}
+          onConfirm={confirmDeleteComment}
+          onCancel={cancelDeleteComment}
+          title="Delete Comment"
+          message="Are you sure you want to delete this comment? This action cannot be undone."
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
+        
+        {/* Post Delete Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showDeletePostModal}
+          onConfirm={confirmDeletePost}
+          onCancel={cancelDeletePost}
+          title="Delete Post"
+          message="Are you sure you want to delete this post? This action will permanently remove the post and all its comments."
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
+        
       </main>
     </div>
   );

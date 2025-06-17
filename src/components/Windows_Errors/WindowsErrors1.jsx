@@ -37,14 +37,6 @@ const WindowsErrors1 = () => {
             </div>
         </form>
 
-      <div className="tabs-container">
-        <div className="tabs">
-          <span className="tab active">Popular</span>
-          <span className="tab">Recent</span>
-        </div>
-        <div className="hot-tag">HOT</div>
-      </div>
-
       <div className="cards-container">
         <div className="card">
           <h3>How to fix the blue screen of death error in windows 10</h3>
