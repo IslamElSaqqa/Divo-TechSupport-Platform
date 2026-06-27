@@ -1,0 +1,213 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 1000px;
+}
+
+.statsContainer {
+  display: flex;
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.statValue {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 130%;
+  color: #232d42;
+}
+
+.statLabel {
+  font-family: 'Circular Std', sans-serif;
+  font-weight: 450;
+  font-size: 20px;
+  line-height: 175%;
+  color: #8a92a6;
+}
+
+.divider {
+  width: 1px;
+  height: 62px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.chartsContainer {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+}
+
+.servicesChart, .conversionsChart {
+  flex: 1;
+  background: #fff;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.chartHeader h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #232d42;
+  margin: 0;
+}
+
+.periodSelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Circular Std', sans-serif;
+  font-weight: 450;
+  font-size: 16px;
+  color: #8a92a6;
+  cursor: pointer;
+  border: none;
+  font-size: bold;
+}
+
+.periodSelector img {
+  width: 24px;
+  height: 24px;
+}
+
+.donutChart {
+  display: flex;
+  gap: 37px;
+  align-items: center;
+}
+
+.donutPlaceholder {
+  width: 206px;
+  height: 206px;
+  border: 2px solid #eee;
+  border-radius: 50%;
+}
+
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+.metricValue {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 175%;
+  color: #232d42;
+}
+
+.metricLabel {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 175%;
+  color: #8a92a6;
+}
+
+.barChart {
+  height: 238px;
+  display: flex;
+  flex-direction: column;
+}
+
+.barChartPlaceholder {
+  flex-grow: 1;
+  border: 2px solid #eee;
+  margin-bottom: 16px;
+}
+
+.daysLabel {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 130%;
+  color: #232d42;
+}
+
+.tableContainer {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: flex;
+  background: #ffae35;
+  padding: 21px;
+}
+
+.headerCell {
+  flex: 1;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 175%;
+  text-align: center;
+}
+
+.tableBody {
+  border: 0.5px solid #cbcbcb;
+  overflow-y: scroll;
+  height: 150px;
+}
+
+.tableRow {
+  display: flex;
+  padding: 17px;
+  border-bottom: 0.5px solid #cbcbcb;
+}
+
+.cell {
+  flex: 1;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 175%;
+  text-align: center;
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .chartsContainer {
+    flex-direction: column;
+  }
+}
+

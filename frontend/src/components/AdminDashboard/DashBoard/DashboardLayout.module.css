@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px;
+  padding-top: 0px;
+  background-color: #f8f9fa;
+  overflow: auto;
+}
+
+.contentArea {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+.innerDivArea{
+  display: inline-block; 
+  vertical-align: middle; 
+  width: 1000px;
+  min-width: 1000px;
+  margin: auto;
+  height: 1080px;          
+  line-height: normal;
+  max-width: 1000px;
+  max-height: 1080px;
+}
+
