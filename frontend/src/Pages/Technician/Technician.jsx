@@ -418,14 +418,26 @@ const Technician = () => {
                                 Rejected
                               </div>
                             ) : (
-                              <button
-                                className={styles.resetButton}
-                                onClick={() =>
-                                  handleStatusChange(row._id, "rejected")
-                                }
-                              >
-                                Cancel
-                              </button>
+                              <div className={styles.actionButtons}>
+                                <button
+                                  className={styles.acceptButton}
+                                  onClick={() =>
+                                    handleStatusChange(row._id, "completed")
+                                  }
+                                >
+                                  Complete
+                                </button>
+                                <button
+                                  className={styles.rejectButton}
+                                  onClick={() =>
+                                    handleStatusChange(row._id, "rejected")
+                                  }
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                              
+                              
                             )}
                           </td>
                         </tr>

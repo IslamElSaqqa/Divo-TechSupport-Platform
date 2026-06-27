@@ -85,6 +85,7 @@
   cursor: pointer;
   border: none;
   font-size: bold;
+  background-color: #fff;
 }
 
 .periodSelector img {
